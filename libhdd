@@ -4,9 +4,13 @@ new_session -n 'Editor'
 
 
 send_line 'Editor' ${EDITOR:-vi}
+split 'Editor' -v -p 25
+send_line 'Editor'.2 'nosetests'
 
 new_window -n 'Console'
 send_line 'Console' ipython
+
+select_window 'Editor'
 
 # -*- mode: sh -*-
 # vi: set ft=sh :
