@@ -10,9 +10,6 @@ class Requirement(object):
         self.is_pf = is_pf
         self.value = int(value)
 
-    def value(self):
-        return self.value
-
 
 class Lot(object):
     pass
