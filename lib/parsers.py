@@ -9,4 +9,6 @@ def parse_req(str_req):
     return req
 
 
-
+def parse_lot(str_lot):
+    # TODO: implement parsed lot data object
+    pass
