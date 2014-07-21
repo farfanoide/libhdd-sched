@@ -1,0 +1,12 @@
+# Make an htop window make a regular shell window
+
+new_session -n 'Editor'
+
+
+send_line 'Editor' ${EDITOR:-vi}
+
+new_window -n 'Console'
+send_line 'Console' ipython
+
+# -*- mode: sh -*-
+# vi: set ft=sh :
