@@ -1,13 +1,12 @@
 import unittest
 from lib.lot import Requirement
-from types import IntType
 
 
 class TestRequirement(unittest.TestCase):
 
     def test_value_type(self):
         req = Requirement('4')
-        self.assertEqual(type(req.value), IntType)
+        self.assertIsInstance(req.value, int)
 
     def test_is_not_pf(self):
         req = Requirement('4')

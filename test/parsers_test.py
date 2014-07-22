@@ -24,7 +24,8 @@ class TestLotParser(unittest.TestCase):
         self.invalid_data = {
             'empty': '',
             'only_words': 'no numbers here',
-            'symbols': '*yo #mamma so* fat# ** ## ***'
+            'symbols': '*yo #mamma so* fat# ** ## ***',
+            'multi_whitespace': '    34   *12     456 230 *90  '
         }
         self.valid_data = {
             'only_numbers': '5 90 34 88',
@@ -37,11 +38,47 @@ class TestLotParser(unittest.TestCase):
             'numbers_words_symbols': '*45  09 tres 88 ilegal 456 #45',
             'two_hashtags': '#35  09 tres 88 ilegal 456 #45'
         }
+        self.lot_dict = {
+            'movs': None, 'pfs': [],
+            'trash': [], 'reqs': []
+        }
 
-    # def test_empty_data(self):
-    #     parsed = parsers.parse_req(self.invalid_data['empty'])
-    #     self.assertTrue(parsed.is_empty())
-    #     return self.skipTest('not implemented yet')
+    def test_remove_extra_whitespaces_helper(self):
+        parsed_str = parsers._remove_extra_whitespaces(
+            self.invalid_data['multi_whitespace'])
+        self.assertEqual(parsed_str, '34 *12 456 230 *90')
+
+
+    def test_parse_movs_helper(self):
+        self.lot_dict, parsed_str = parsers._parse_movs(
+            self.lot_dict, self.mixed_data['two_hashtags'])
+        self.assertEqual(self.lot_dict['movs'], '35')
+        self.assertEqual(parsed_str, '09 tres 88 ilegal 456')
+
+    def test_parse_movs_helper_without_movs(self):
+        self.lot_dict, parsed_str = parsers._parse_movs(
+            self.lot_dict, self.valid_data['only_numbers'])
+        self.assertIsNone(self.lot_dict['movs'])
+        self.assertEqual(parsed_str, self.valid_data['only_numbers'])
+
+    def test_parse_pfs_helper(self):
+        self.lot_dict, parsed_str = parsers._parse_pfs(
+            self.lot_dict, self.valid_data['only_pfs'])
+        self.assertListEqual(self.lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
+        self.assertEqual(parsed_str, '')
+
+    def test_empty_data(self):
+        parsed = parsers.parse_lot(self.invalid_data['empty'])
+        self.assertTrue(parsed.is_empty())
+
+    def test_parses_movement(self):
+        parsed = parsers.parse_lot(self.valid_data['symbols'])
+        self.assertEqual(parsed.movs, '30')
+
+    def test_parses_movements(self):
+        parsed = parsers.parse_lot(self.mixed_data['two_hashtags'])
+        self.assertEqual(parsed.movs, '35')
+        self.assertListEqual(parsed.trash, ['#45'])
 
 
 class TestParsedString(unittest.TestCase):
