@@ -30,7 +30,7 @@ class TestLotParser(unittest.TestCase):
                   'two_hashtags': '#35  09 tres 88 ilegal 456 #45'}
 
     def test_empty_data(self):
-        parsed = parsers.parse_req(invalid_data['empty'])
+        # parsed = parsers.parse_req(invalid_data['empty'])
         # self.assert
         return self.skipTest('not implemented yet')
 
