@@ -38,10 +38,10 @@ class TestLotParser(unittest.TestCase):
             'two_hashtags': '#35  09 tres 88 ilegal 456 #45'
         }
 
-    def test_empty_data(self):
-        # parsed = parsers.parse_req(invalid_data['empty'])
-        # self.assert
-        return self.skipTest('not implemented yet')
+    # def test_empty_data(self):
+    #     parsed = parsers.parse_req(self.invalid_data['empty'])
+    #     self.assertTrue(parsed.is_empty())
+    #     return self.skipTest('not implemented yet')
 
 
 class TestParsedString(unittest.TestCase):
@@ -49,7 +49,7 @@ class TestParsedString(unittest.TestCase):
     def setUp(self):
         self.values = {
             'empty': {'a': '', 'b': ''},
-            'with_values': {'a': 'a', 'b': 'b'}
+            'with_values': {'a': '4', 'b': '89'}
         }
 
     def empty_parsed_string(self):
@@ -70,6 +70,10 @@ class TestParsedString(unittest.TestCase):
     def test_is_empty(self):
         parsed = self.empty_parsed_string()
         self.assertTrue(parsed.is_empty())
+
+    def test_is_not_empty(self):
+        parsed = ParsedString(self.values['with_values'])
+        self.assertFalse(parsed.is_empty())
 
     def test_creates_object_with_values(self):
         parsed = ParsedString(self.values['with_values'])
