@@ -78,14 +78,23 @@ def _parse_pfs(lot_dict, lot_str):
     return lot_dict, lot_str
 
 
+def _parse_reqs(lot_dict, lot_str):
+    reqs = num_str.findall(lot_str)
+    if reqs:
+        lot_dict['reqs'] = reqs
+        lot_str = num_str.sub('', lot_str)
+
+    lot_str = _remove_extra_whitespaces(lot_str)
+    return lot_dict, lot_str
+
+
 def parse_lot(lot_str):
     lot = {'movs': None,
            'pfs': [],
            'trash': [],
            'reqs': []}
     lot, lot_str = _parse_movs(lot, lot_str)
-    # sacar numero de movs para el proximo lote
-    # sacar los page faults
-    # sacar reqs normalitos
+    lot, lot_str = _parse_pfs(lot, lot_str)
+    lot, lot_str = _parse_reqs(lot, lot_str)
 
     return ParsedString(lot)

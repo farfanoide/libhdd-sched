@@ -48,7 +48,6 @@ class TestLotParser(unittest.TestCase):
             self.invalid_data['multi_whitespace'])
         self.assertEqual(parsed_str, '34 *12 456 230 *90')
 
-
     def test_parse_movs_helper(self):
         self.lot_dict, parsed_str = parsers._parse_movs(
             self.lot_dict, self.mixed_data['two_hashtags'])
@@ -64,7 +63,15 @@ class TestLotParser(unittest.TestCase):
     def test_parse_pfs_helper(self):
         self.lot_dict, parsed_str = parsers._parse_pfs(
             self.lot_dict, self.valid_data['only_pfs'])
-        self.assertListEqual(self.lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
+        self.assertListEqual(
+            self.lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
+        self.assertEqual(parsed_str, '')
+
+    def test_parse_requirements(self):
+        self.lot_dict, parsed_str = parsers._parse_reqs(
+            self.lot_dict, self.valid_data['only_numbers'])
+        self.assertListEqual(
+            self.lot_dict['reqs'], ['5', '90', '34', '88'])
         self.assertEqual(parsed_str, '')
 
     def test_empty_data(self):
@@ -79,6 +86,8 @@ class TestLotParser(unittest.TestCase):
         parsed = parsers.parse_lot(self.mixed_data['two_hashtags'])
         self.assertEqual(parsed.movs, '35')
         self.assertListEqual(parsed.trash, ['#45'])
+
+
 
 
 class TestParsedString(unittest.TestCase):
