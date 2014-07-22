@@ -34,9 +34,12 @@ class ParsedString(object):
 def parse_req(str_req):
     pf_str = re.compile('\*')
     if pf_str.match(str_req):
-        req = (int(pf_str.sub('', str_req)), True)
+        req = ParsedString({
+            'requirement': int(pf_str.sub('', str_req)),
+            'is_pf': True
+        })
     else:
-        req = (int(str_req), False)
+        req = ParsedString({'requirement': int(str_req), 'is_pf': False})
 
     return req
 

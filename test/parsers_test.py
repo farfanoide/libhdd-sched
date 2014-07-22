@@ -7,15 +7,15 @@ class TestReqParser(unittest.TestCase):
 
     def test_not_pf_and_value(self):
         """ Test regular requirement """
-        req = parsers.parse_req('4')
-        self.assertEquals(req[0], 4, 'Parsed number error.')
-        self.assertFalse(req[1], 'Parsed page fault  error.')
+        parsed = parsers.parse_req('4')
+        self.assertEquals(parsed.requirement, 4, 'Parsed number error.')
+        self.assertFalse(parsed.is_pf, 'Parsed page fault  error.')
 
     def test_pf_and_value(self):
         """ Test page fault requirement """
-        req = parsers.parse_req('*448')
-        self.assertEquals(req[0], 448, 'Parsed number error.')
-        self.assertTrue(req[1], 'Parsed page fault  error.')
+        parsed = parsers.parse_req('*448')
+        self.assertEquals(parsed.requirement, 448, 'Parsed number error.')
+        self.assertTrue(parsed.is_pf, 'Parsed page fault  error.')
 
 
 class TestLotParser(unittest.TestCase):
