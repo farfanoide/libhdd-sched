@@ -96,5 +96,7 @@ def parse_lot(lot_str):
     lot, lot_str = _parse_movs(lot, lot_str)
     lot, lot_str = _parse_pfs(lot, lot_str)
     lot, lot_str = _parse_reqs(lot, lot_str)
+    if lot_str:
+        lot['trash'] += lot_str.split(' ')
 
     return ParsedString(lot)
