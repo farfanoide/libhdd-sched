@@ -2,12 +2,12 @@
 General purpose library for simulating various disk scheduling algorithms
 
 ## Currently supported algorithms:
-- FIFO
-- FCFS
-- SCAN
-- CSCAN
-- LOOK
-- CLOOK
+- [ ] FIFO
+- [ ] FCFS
+- [ ] SCAN
+- [ ] CSCAN
+- [ ] LOOK
+- [ ] CLOOK
 
 ## Usage:
 
