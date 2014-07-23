@@ -1,13 +1,22 @@
 import re
 
 
-# Regex
+# Regular Expressions used to parse input into usable lists.
+
+# pf_sym -> Page Fault Symbol
 pf_sym = re.compile('\*')
+# pf_full -> Full Page Fault expression, including number and symbol.
 pf_full = re.compile('\*\d+')
+# movs_sym -> Initialization Movements Symbol
 movs_sym = re.compile('#')
+# movs_full -> Full Initialization Movements expression, including
+# number and symbol
 movs_full = re.compile('#\d+')
+# num_str -> Regular Requirement expression.
 num_str = re.compile('\d+')
+# whitespace -> Sequence of whitespaces expression.
 whitespace = re.compile('\s+')
+# w_extremes -> Preceding and Trailing whitespaces expression.
 w_extremes = re.compile('^\s+|\s+$')
 
 
