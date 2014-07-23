@@ -2,7 +2,7 @@
 General purpose library for simulating various disk scheduling algorithms
 
 ## Currently supported algorithms:
-- [ ] FIFO
+- [x] FIFO
 - [ ] FCFS
 - [ ] SCAN
 - [ ] CSCAN
@@ -14,7 +14,7 @@ General purpose library for simulating various disk scheduling algorithms
 ## Contributing:
 
 ### Dependencies:
-Usage of virtualenv is encouraged.
+Usage of [virtualenv][1] is encouraged.
 
 Install dependencies from REQUIREMENTS like this:
 
@@ -26,3 +26,5 @@ Navigate to the projects root directory and execute:
     $ py.test
 
 
+<!-- Links: -->
+[1]: https://pypi.python.org/pypi/virtualenv
