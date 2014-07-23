@@ -1,11 +1,10 @@
-# Make an htop window make a regular shell window
 
 new_session -n 'Editor'
 
 
 send_line 'Editor' ${EDITOR:-vi}
 split 'Editor' -v -p 25
-send_line 'Editor'.2 'nosetests'
+send_line 'Editor'.2 'workon libhdd && py.test'
 
 new_window -n 'Console'
 send_line 'Console' ipython
