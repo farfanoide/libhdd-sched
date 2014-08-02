@@ -18,7 +18,8 @@ num_str = re.compile('\d+')
 whitespace = re.compile('\s+')
 # w_extremes -> Preceding and Trailing whitespaces expression.
 w_extremes = re.compile('^\s+|\s+$')
-
+# keyword -> assignment expression
+assignment = re.compile('(\w+)=(\w+)')
 
 class ParsedString(object):
 
@@ -126,6 +127,7 @@ def _parse_reqs(lot_dict, lot_str):
     return lot_dict, lot_str
 
 
+
 def parse_req(reqs_str):
     """
     Returns a ParsedString out of a simple string, ready to
@@ -151,10 +153,11 @@ def parse_hdd(hdd_str):
 def parse_lot(lot_str):
     """
     Returns a ParsedString out of a simple string, ready to
-    instatiate a Lot().
+    instantiate a Lot().
 
     Keyword Arguments
     lot_str (string) -- String containing a number and optionally a symbol.
+
     Example lot_str '*55 45 66 89 #33 some useless strings' would return
     ParsedString({
     'reqs': ['45', '66', '89'],
@@ -174,3 +177,18 @@ def parse_lot(lot_str):
         lot['trash'] += lot_str.split(' ')
 
     return ParsedString(lot)
+
+def _keyword_parser(kw_str=''):
+    """
+    Receives a string representing variable assignments and returns them
+    as a dictionary. Any unused data from kw_str is returned as trash.
+
+    Keyword Arguments
+    kw_str (string) -- String representing any assignment.
+
+    Example kw_str = 'HDD: tracks=1024 rpm=5000' would return
+    {'tracks':'1024', 'rpm':'5000'}, 'HDD:'
+    """
+    data = dict(assignment.findall(kw_str))
+    trash = _remove_extra_whitespaces(assignment.sub('', kw_str))
+    return data, trash

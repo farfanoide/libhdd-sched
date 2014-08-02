@@ -1,0 +1,7 @@
+SIMULATION: direction=right position=250 name=protosimulation
+HDD: tracks=512 rpm=5400 seek_time=500 name=protodisk
+LOTS:
+53 151 *500 *400 33 #45 353 100
+#15 *100 #35 455 15
+101 126 366 415
+END_LOTS
