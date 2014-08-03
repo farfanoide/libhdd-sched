@@ -126,9 +126,22 @@ def _parse_reqs(lot_dict, lot_str):
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
 
+def _keyword_parser(kw_str=''):
+    """
+    Receives a string representing variable assignments and returns them
+    as a dictionary. Any unused data from kw_str is returned as trash.
 
+    Keyword Arguments
+    kw_str (string) -- String representing any assignment.
 
-def parse_req(reqs_str):
+    Example kw_str = 'HDD: tracks=1024 rpm=5000' would return
+    {'tracks':'1024', 'rpm':'5000'}, 'HDD:'
+    """
+    data = dict(assignment.findall(kw_str))
+    trash = _remove_extra_whitespaces(assignment.sub('', kw_str))
+    return data, trash
+
+def parse_req(reqs_str=''):
     """
     Returns a ParsedString out of a simple string, ready to
     instatiate a Requirement().
@@ -146,11 +159,13 @@ def parse_req(reqs_str):
     return ParsedString(req)
 
 
-def parse_hdd(hdd_str):
-    pass
+def parse_hdd(hdd_str=''):
+    hdd, trash = _keyword_parser(hdd_str)
+    if trash:
+        hdd['trash'] = trash.split(' ')
+    return ParsedString(hdd)
 
-
-def parse_lot(lot_str):
+def parse_lot(lot_str=''):
     """
     Returns a ParsedString out of a simple string, ready to
     instantiate a Lot().
@@ -178,17 +193,3 @@ def parse_lot(lot_str):
 
     return ParsedString(lot)
 
-def _keyword_parser(kw_str=''):
-    """
-    Receives a string representing variable assignments and returns them
-    as a dictionary. Any unused data from kw_str is returned as trash.
-
-    Keyword Arguments
-    kw_str (string) -- String representing any assignment.
-
-    Example kw_str = 'HDD: tracks=1024 rpm=5000' would return
-    {'tracks':'1024', 'rpm':'5000'}, 'HDD:'
-    """
-    data = dict(assignment.findall(kw_str))
-    trash = _remove_extra_whitespaces(assignment.sub('', kw_str))
-    return data, trash

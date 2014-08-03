@@ -151,13 +151,35 @@ class TestParsedString(unittest.TestCase):
         parsed = ParsedString(self.values['with_values'])
         self.assertFalse(parsed.is_empty())
 
-#class TestHddParser(unittest.TestCase):
 
-#    def set_up(self):
-#        self.data = {
-#            valid: 'tracks=512 rpm=5400 seek_time=500 name=protodisk',
-#            wo
+class TestHddParser(unittest.TestCase):
 
+    def setUp(self):
+        self.data = {
+            'valid': 'HDD: tracks=512 rpm=5400 seek_time=500 name=protodisk',
+            'invalid': "some sarasa h3r3",
+            'empty': '',
+            'mixed': 'HDD: tracks=512 rpm=5400 seek_time= high  '
+        }
+
+    def test_parse_hdd_type(self):
+        parsed = parsers.parse_hdd()
+        self.assertIsInstance(parsed, ParsedString)
+
+    def test_parse_empty_hdd(self):
+        parsed = parsers.parse_hdd(self.data['empty'])
+        self.assertTrue(parsed.is_empty())
+
+    def test_parse_valid_hdd(self):
+        parsed = parsers.parse_hdd(self.data['valid'])
+        self.assertEqual(parsed.trash, ['HDD:'])
+        self.assertListEqual(sorted(parsed.all_values()), sorted(['512', '5400', '500',
+            'protodisk', ['HDD:']]))
+        self.assertListEqual(sorted(parsed.attribute_names()), sorted(['tracks', 'rpm',
+            'seek_time', 'name', 'trash']))
+
+#  parsed = parsers.parse_hdd(self.data['empty'])
+#  parsed = parsers.parse_hdd(self.data['empty'])
 class TestParserHelpers(unittest.TestCase):
 
     def setUp(self):
