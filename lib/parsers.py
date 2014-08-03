@@ -21,6 +21,7 @@ w_extremes = re.compile('^\s+|\s+$')
 # keyword -> assignment expression
 assignment = re.compile('(\w+)=(\w+)')
 
+
 class ParsedString(object):
 
     """
@@ -126,6 +127,7 @@ def _parse_reqs(lot_dict, lot_str):
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
 
+
 def _keyword_parser(kw_str=''):
     """
     Receives a string representing variable assignments and returns them
@@ -140,6 +142,7 @@ def _keyword_parser(kw_str=''):
     data = dict(assignment.findall(kw_str))
     trash = _remove_extra_whitespaces(assignment.sub('', kw_str))
     return data, trash
+
 
 def parse_req(reqs_str=''):
     """
@@ -164,6 +167,7 @@ def parse_hdd(hdd_str=''):
     if trash:
         hdd['trash'] = trash.split(' ')
     return ParsedString(hdd)
+
 
 def parse_lot(lot_str=''):
     """
@@ -192,4 +196,3 @@ def parse_lot(lot_str=''):
         lot['trash'] += lot_str.split(' ')
 
     return ParsedString(lot)
-

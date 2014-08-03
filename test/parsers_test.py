@@ -3,7 +3,6 @@ from lib import parsers
 from lib.parsers import ParsedString
 
 
-
 class TestReqParser(unittest.TestCase):
 
     def test_not_pf_and_value(self):
@@ -117,6 +116,7 @@ class TestParsers(unittest.TestCase):
         self.assertListEqual(parsed.reqs, ['09', '88', '456'])
         self.assertListEqual(parsed.trash, ['#45', 'tres', 'ilegal'])
 
+
 class TestParsedString(unittest.TestCase):
 
     def setUp(self):
@@ -173,28 +173,32 @@ class TestHddParser(unittest.TestCase):
     def test_parse_valid_hdd(self):
         parsed = parsers.parse_hdd(self.data['valid'])
         self.assertEqual(parsed.trash, ['HDD:'])
-        self.assertListEqual(sorted(parsed.all_values()), sorted(['512', '5400', '500',
-            'protodisk', ['HDD:']]))
-        self.assertListEqual(sorted(parsed.attribute_names()), sorted(['tracks', 'rpm',
-            'seek_time', 'name', 'trash']))
+        self.assertListEqual(
+            sorted(parsed.all_values()),
+            sorted(['512', '5400', '500', 'protodisk', ['HDD:']]))
+        self.assertListEqual(
+            sorted(parsed.attribute_names()),
+            sorted(['tracks', 'rpm', 'seek_time', 'name', 'trash']))
 
-#  parsed = parsers.parse_hdd(self.data['empty'])
-#  parsed = parsers.parse_hdd(self.data['empty'])
+
 class TestParserHelpers(unittest.TestCase):
 
     def setUp(self):
-        self.valid_dict = { 'tracks':'512',
-                            'rpm':'5400',
-                            'seek_time':'500',
-                            'name':'protodisk' ,
+        self.valid_dict = {
+            'tracks': '512',
+            'rpm': '5400',
+            'seek_time': '500',
+            'name': 'protodisk',
         }
-        self.invalid_data = { 'empty': '',
+        self.invalid_data = {
+            'empty': '',
             'non_kw': 'are you talking to me?',
         }
         self.valid_data = {
             'valid': 'tracks=512 rpm=5400 seek_time=500 name=protodisk',
             'mixed': 'HDD: tracks=512 rpm=5400 seek_time=500 name=protodisk',
         }
+
     def test_keyword_parser_types(self):
         parsed, trash = parsers._keyword_parser()
         self.assertIsInstance(parsed, dict)
