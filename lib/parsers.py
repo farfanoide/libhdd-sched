@@ -18,9 +18,10 @@ num_str = re.compile('\d+')
 whitespace = re.compile('\s+')
 # w_extremes -> Preceding and Trailing whitespaces expression.
 w_extremes = re.compile('^\s+|\s+$')
-# keyword -> assignment expression
+# assignment -> assignment expression
 assignment = re.compile('(\w+)=(\w+)')
-
+# keyword_title -> keyword string title
+keyword_title = re.compile('^[A-Z]+\:')
 
 class ParsedString(object):
 
@@ -163,6 +164,7 @@ def parse_req(reqs_str=''):
 
 
 def parse_hdd(hdd_str=''):
+    hdd_str = keyword_title.sub('', hdd_str)
     hdd, trash = _keyword_parser(hdd_str)
     if trash:
         hdd['trash'] = trash.split(' ')
