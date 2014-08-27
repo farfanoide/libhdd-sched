@@ -3,25 +3,17 @@ import re
 
 # Regular Expressions used to parse input into usable lists.
 
-# pf_sym -> Page Fault Symbol
-pf_sym = re.compile('\*')
-# pf_full -> Full Page Fault expression, including number and symbol.
-pf_full = re.compile('\*\d+')
-# movs_sym -> Initialization Movements Symbol
-movs_sym = re.compile('#')
-# movs_full -> Full Initialization Movements expression, including
-# number and symbol
-movs_full = re.compile('#\d+')
-# num_str -> Regular Requirement expression.
-num_str = re.compile('\d+')
-# whitespace -> Sequence of whitespaces expression.
-whitespace = re.compile('\s+')
-# w_extremes -> Preceding and Trailing whitespaces expression.
-w_extremes = re.compile('^\s+|\s+$')
-# assignment -> assignment expression
-assignment = re.compile('(\w+)=(\w+)')
-# keyword_title -> keyword string title
-keyword_title = re.compile('^[A-Z]+\:')
+
+pf_sym = re.compile('\*')       # Page Fault Symbol.
+movs_sym = re.compile('#')      # Initialization Movements Symbol.
+movs_full = re.compile('#\d+')  # Init Movements including number and symbol.
+pf_full = re.compile('\*\d+')   # Full Page Fault, including number and symbol.
+num_str = re.compile('\d+')             # Regular Requirement.
+whitespace = re.compile('\s+')          # Sequence of whitespaces.
+w_extremes = re.compile('^\s+|\s+$')    # Preceding and Trailing whitespaces.
+assignment = re.compile('(\w+)=(\w+)')  # Assignment expression.
+keyword_title = re.compile('^[A-Z]+\:') # Keyword string title.
+
 
 class ParsedString(object):
 
@@ -64,10 +56,10 @@ def _remove_extra_whitespaces(string):
 
 def _parse_movs(lot_dict, lot_str):
     """
-    Parses Initialization Movements out of a string and returns them as a string
-    Initialization Movements are intended to let a Simulation() know how many
-    movements of a Lot() it can attend before another Lot() must be taken into
-    account.
+    Parses Initialization Movements out of a string and returns them as a
+    string Initialization Movements are intended to let a Simulation() know how
+    many movements of a Lot() it can attend before another Lot() must be taken
+    into account.
 
     Keyword Arguments
     lot_dict (dict)   -- Dictionary containing basic data tu create a Lot()
