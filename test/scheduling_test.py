@@ -12,10 +12,11 @@ class TestAlgorithms(unittest.TestCase):
         for each in self.algorithms:
             self.assertNotEqual('Algorithms', each.name)
 
-    def test_input_output(self):
+    def test_resolve_type(self):
         for each in self.algorithms:
-            each.resolve(['3','5','7'])
-        self.assertTrue(1 == 1)
+            self.assertIsInstance(each.resolve(), dict)
+
+
 
 if __name__ == '__main__':
     unittest.main()
