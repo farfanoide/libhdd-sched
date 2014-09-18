@@ -12,7 +12,7 @@ class Algorithms:
 class CLook(Algorithms):
     """"
     Receive a lot and process it, return the lot 
-    like Scan algorithm says
+    like clook algorithm says
     """
     def __init__(self):
         self.name = 'clook'
@@ -21,7 +21,7 @@ class CLook(Algorithms):
 class CScan(Algorithms):
     """"
     Receive a lot and process it, return the lot 
-    like Scan algorithm says
+    like cscan algorithm says
     """
     def __init__(self):
         self.name = 'cscan'
@@ -30,7 +30,7 @@ class CScan(Algorithms):
 class Fcfs(Algorithms):
     """
     Receive a lot and process it, return the lot 
-    like Scan algorithm says
+    like fcfs algorithm says
     """
     def __init__(self):
         self.name = 'fcfs'
@@ -39,7 +39,7 @@ class Fcfs(Algorithms):
 class Fifo(Algorithms):
     """
     Receive a lot and process it, return the lot 
-    like Scan algorithm says
+    like fifo algorithm says
     """
     def __init__(self):
         self.name = 'fifo'
@@ -48,7 +48,7 @@ class Fifo(Algorithms):
 class Look(Algorithms):
     """
     Receive a lot and process it, return the lot 
-    like Scan algorithm says
+    like look algorithm says
     """
     def __init__(self):
         self.name = 'look'
