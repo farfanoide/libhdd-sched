@@ -1,9 +1,8 @@
 import re
-from lot import Requirement, Lot
+from simulation import Requirement, Lot, Hdd
 
 
 # Regular Expressions used to parse input into usable lists.
-
 pf_sym = re.compile('\*')       # Page Fault Symbol.
 movs_sym = re.compile('#')      # Initialization Movements Symbol.
 movs_full = re.compile('#\d+')  # Init Movements including number and symbol.
@@ -28,9 +27,9 @@ def _remove_extra_whitespaces(string):
 def _parse_movs(lot_dict, lot_str):
     """
     Parses Initialization Movements out of a string and returns them as a
-    string Initialization Movements are intended to let a Simulation() know how
-    many movements of a Lot() it can attend before another Lot() must be taken
-    into account.
+    string. Initialization Movements are intended to let a `Simulation()` know
+    how many movements of a Lot() it can attend before another Lot() must be
+    taken into account.
 
     Keyword Arguments
     lot_dict (dict)   -- Dictionary containing basic data tu create a Lot()
@@ -92,22 +91,6 @@ def _parse_reqs(lot_dict, lot_str):
     return lot_dict, lot_str
 
 
-def _keyword_parser(kw_str=''):
-    """
-    Receives a string representing variable assignments and returns them
-    as a dictionary. Any unused data from kw_str is returned as trash.
-
-    Keyword Arguments
-    kw_str (string) -- String representing any assignment.
-
-    Example kw_str = 'HDD: tracks=1024 rpm=5000' would return
-    {'tracks':'1024', 'rpm':'5000'}, 'HDD:'
-    """
-    data = dict(assignment.findall(kw_str))
-    trash = _remove_extra_whitespaces(assignment.sub('', kw_str))
-    return data, trash
-
-
 def parse_req(reqs_str=''):
     """
     Returns a ParsedString out of a simple string, ready to
@@ -124,14 +107,6 @@ def parse_req(reqs_str=''):
         req = {'value': int(reqs_str), 'is_pf': False}
 
     return Requirement(req)
-
-
-def parse_hdd(hdd_str=''):
-    hdd_str = keyword_title.sub('', hdd_str)
-    hdd, trash = _keyword_parser(hdd_str)
-    if trash:
-        hdd['trash'] = trash.split(' ')
-    return ParsedString(hdd)
 
 
 def _instantiate_reqs(temp_lot):

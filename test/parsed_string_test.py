@@ -1,5 +1,5 @@
 import unittest
-from lib.parsed_string import ParsedString
+from lib.simulation import ParsedString
 
 
 class TestParsedString(unittest.TestCase):
@@ -34,4 +34,3 @@ class TestParsedString(unittest.TestCase):
         parsed_string = ParsedString()
         self.assertTrue(parsed_string._is_valid_attribute('a'))
         self.assertFalse(parsed_string._is_valid_attribute('d'))
-

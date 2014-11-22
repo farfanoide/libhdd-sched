@@ -34,7 +34,32 @@ class ParsedString(object):
 
     def _is_valid_attribute(self, attribute):
         """
-        Returns True if a given attribute name is found inside the permitted attributes list
+        Returns True if a given attribute name is found inside the permitted
+        attributes list
         """
 
         return attribute in self.permitted_attributes
+
+
+class Simulation(ParsedString):
+    permitted_attributes = ['name', 'direction', 'position']
+
+
+class Hdd(ParsedString):
+    permitted_attributes = ['name', 'tracks', 'rpm', 'seek_time']
+
+
+class Requirement(ParsedString):
+
+    """
+    Models a single requirement.
+
+    Attributes:
+    value (int)     -- Disk track number.
+    is_pf (boolean) -- Wether it is a page fault or not.
+    """
+    permitted_attributes = ['value', 'is_pf']
+
+
+class Lot(ParsedString):
+    permitted_attributes = ['requirements', 'page_faults', 'movements']

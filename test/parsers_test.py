@@ -1,6 +1,6 @@
 import unittest
 from lib import parsers
-from lib.lot import Requirement, Lot
+from lib.simulation import Requirement, Lot
 
 
 class TestReqParser(unittest.TestCase):
@@ -75,122 +75,57 @@ class TestLotParser(unittest.TestCase):
         self.assertEqual(len(lot.requirements), 4)
 
 
-# class TestHddParser(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.data = {
-#             'valid': 'HDD: tracks=512 rpm=5400 seek_time=500 name=protodisk',
-#             'invalid': "some sarasa h3r3",
-#             'empty': '',
-#             'mixed': 'HDD: tracks=512 rpm=5400 seek_time= high  '
-#         }
-#
-#     def test_parse_hdd_type(self):
-#         parsed = parsers.parse_hdd()
-#         self.assertIsInstance(parsed, ParsedString)
-#
-#     def test_parse_empty_hdd(self):
-#         parsed = parsers.parse_hdd(self.data['empty'])
-#         self.assertTrue(parsed.is_empty())
-#
-#     def test_parse_valid_hdd(self):
-#         parsed = parsers.parse_hdd(self.data['valid'])
-#         self.assertListEqual(
-#             sorted(parsed.all_values()),
-#             sorted(['512', '5400', '500', 'protodisk']))
-#         self.assertListEqual(
-#             sorted(parsed.attribute_names()),
-#             sorted(['tracks', 'rpm', 'seek_time', 'name']))
-#
-#     def test_parse_mixed_hdd(self):
-#         parsed = parsers.parse_hdd(self.data['mixed'])
-#         self.assertEqual(parsed.trash, ['seek_time=', 'high'])
-#         self.assertListEqual(
-#             sorted(parsed.all_values()),
-#             sorted(['512', '5400', ['seek_time=', 'high']]))
-#         self.assertListEqual(
-#             sorted(parsed.attribute_names()),
-#             sorted(['tracks', 'rpm', 'trash']))
-#
-#
-# class TestParserHelpers(unittest.TestCase):
-#
-#     def setUp(self):
-#         self.lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
-#         self.hdd_dict = {
-#             'tracks': '512',
-#             'rpm': '5400',
-#             'seek_time': '500',
-#             'name': 'protodisk'
-#         }
-#         self.invalid_data = {
-#             'empty': '',
-#             'non_kw': 'are you talking to me?',
-#             'multi_whitespace': '    34   *12     456 230 *90  '
-#         }
-#         self.valid_data = {
-#             'only_pfs': '*34 *76 *32 *342',
-#             'only_numbers': '5 90 34 88',
-#             'all': '34 *12 456 #230 *90',
-#             'valid': 'tracks=512 rpm=5400 seek_time=500 name=protodisk',
-#             'mixed': 'HDD: tracks=512 rpm=5400 seek_time=500 name=protodisk',
-#         }
-#
-#     def test_keyword_parser_types(self):
-#         parsed, trash = parsers._keyword_parser()
-#         self.assertIsInstance(parsed, dict)
-#         self.assertIsInstance(trash, str)
-#
-#     def test_keyword_parser_with_empty_str(self):
-#         parsed, trash = parsers._keyword_parser(self.invalid_data['empty'])
-#         self.assertDictEqual(parsed, {})
-#         self.assertEqual(trash, '')
-#
-#     def test_keyword_parser_valid(self):
-#         parsed, trash = parsers._keyword_parser(self.valid_data['valid'])
-#         self.assertDictEqual(parsed, self.hdd_dict)
-#         self.assertEqual(trash, '')
-#
-#     def test_keyword_parser_trash(self):
-#         parsed, trash = parsers._keyword_parser(self.invalid_data['non_kw'])
-#         self.assertEquals(trash, self.invalid_data['non_kw'])
-#         self.assertDictEqual(parsed, {})
-#
-#     def test_keyword_parser_mixed(self):
-#         parsed, trash = parsers._keyword_parser(self.valid_data['mixed'])
-#         self.assertEquals(trash, 'HDD:')
-#         self.assertDictEqual(parsed, self.hdd_dict)
-#
-#     def test_remove_extra_whitespaces_helper(self):
-#         parsed_str = parsers._remove_extra_whitespaces(
-#             self.invalid_data['multi_whitespace'])
-#         self.assertEqual(parsed_str, '34 *12 456 230 *90')
-#
-#     def test_parse_movs_helper(self):
-#         lot_dict, parsed_str = parsers._parse_movs(
-#             self.lot_dict, self.valid_data['all'])
-#         self.assertEqual(lot_dict['movs'], '230')
-#         self.assertEqual(parsed_str, '34 *12 456 *90')
-#
-#     def test_parse_movs_helper_without_movs(self):
-#         lot_dict, parsed_str = parsers._parse_movs(
-#             self.lot_dict, self.valid_data['only_numbers'])
-#         self.assertIsNone(lot_dict['movs'])
-#         self.assertEqual(parsed_str, self.valid_data['only_numbers'])
-#
-#     def test_parse_pfs_helper(self):
-#         lot_dict, parsed_str = parsers._parse_pfs(
-#             self.lot_dict, self.valid_data['only_pfs'])
-#         self.assertListEqual(lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
-#         self.assertEqual(parsed_str, '')
-#
-#     def test_parse_requirements(self):
-#         self.lot_dict, parsed_str = parsers._parse_reqs(
-#             self.lot_dict, self.valid_data['only_numbers'])
-#         self.assertListEqual(
-#             self.lot_dict['reqs'], ['5', '90', '34', '88'])
-#         self.assertEqual(parsed_str, '')
-#
+class TestParserHelpers(unittest.TestCase):
+
+    hdd_dict = {
+        'tracks': '512',
+        'rpm': '5400',
+        'seek_time': '500',
+        'name': 'protodisk'
+    }
+    invalid_data = {
+        'empty': '',
+        'multi_whitespace': '    34   *12     456 230 *90  '
+    }
+    valid_data = {
+        'only_pfs': '*34 *76 *32 *342',
+        'only_numbers': '5 90 34 88',
+        'all': '34 *12 456 #230 *90',
+    }
+    def setUp(self):
+        self.lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
+
+
+    def test_remove_extra_whitespaces_helper(self):
+        parsed_str = parsers._remove_extra_whitespaces(
+            self.invalid_data['multi_whitespace'])
+        self.assertEqual(parsed_str, '34 *12 456 230 *90')
+
+    def test_parse_movs_helper(self):
+        lot_dict, parsed_str = parsers._parse_movs(
+            self.lot_dict, self.valid_data['all'])
+        self.assertEqual(lot_dict['movs'], '230')
+        self.assertEqual(parsed_str, '34 *12 456 *90')
+
+    def test_parse_movs_helper_without_movs(self):
+        lot_dict, parsed_str = parsers._parse_movs(
+            self.lot_dict, self.valid_data['only_numbers'])
+        self.assertIsNone(lot_dict['movs'])
+        self.assertEqual(parsed_str, self.valid_data['only_numbers'])
+
+    def test_parse_pfs_helper(self):
+        lot_dict, parsed_str = parsers._parse_pfs(
+            self.lot_dict, self.valid_data['only_pfs'])
+        self.assertListEqual(lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
+        self.assertEqual(parsed_str, '')
+
+    def test_parse_requirements(self):
+        self.lot_dict, parsed_str = parsers._parse_reqs(
+            self.lot_dict, self.valid_data['only_numbers'])
+        self.assertListEqual(
+            self.lot_dict['reqs'], ['5', '90', '34', '88'])
+        self.assertEqual(parsed_str, '')
+
 
 if __name__ == '__main__':
     unittest.main()
