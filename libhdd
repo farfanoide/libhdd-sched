@@ -7,7 +7,7 @@ split 'Editor' -v -p 25
 send_line 'Editor'.2 'workon libhdd && py.test'
 
 new_window -n 'Console'
-send_line 'Console' ipython
+send_line 'Console' 'workon libhdd && ipython'
 
 select_window 'Editor'
 
