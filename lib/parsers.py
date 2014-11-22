@@ -1,8 +1,8 @@
 import re
+from lot import Requirement, Lot
 
 
 # Regular Expressions used to parse input into usable lists.
-
 
 pf_sym = re.compile('\*')       # Page Fault Symbol.
 movs_sym = re.compile('#')      # Initialization Movements Symbol.
@@ -12,36 +12,7 @@ num_str = re.compile('\d+')             # Regular Requirement.
 whitespace = re.compile('\s+')          # Sequence of whitespaces.
 w_extremes = re.compile('^\s+|\s+$')    # Preceding and Trailing whitespaces.
 assignment = re.compile('(\w+)=(\w+)')  # Assignment expression.
-keyword_title = re.compile('^[A-Z]+\:') # Keyword string title.
-
-
-class ParsedString(object):
-
-    """
-    Data Object to be returned by parsers.
-
-    Keyword arguments
-    data (dict) -- Dictionary containing attribute names and it's values
-    """
-
-    def __init__(self, data):
-        for key, value in data.iteritems():
-            setattr(self, key, value)
-
-    def attribute_names(self):
-        """ Returns a list of attribute's names for the current instance """
-        return self.__dict__.keys()
-
-    def all_values(self):
-        """ Returns a list of attribute's values for the current instance """
-        return self.__dict__.values()
-
-    def is_empty(self):
-        """
-        Returns True if all values for the current
-        instance are false or None
-        """
-        return not(any(self.all_values()))
+keyword_title = re.compile('^[A-Z]+\:')  # Keyword string title.
 
 
 def _remove_extra_whitespaces(string):
@@ -148,11 +119,11 @@ def parse_req(reqs_str=''):
     ParsedString({'requirement': 55, 'is_pf': True})
     """
     if pf_sym.match(reqs_str):
-        req = {'requirement': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
+        req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
     else:
-        req = {'requirement': int(reqs_str), 'is_pf': False}
+        req = {'value': int(reqs_str), 'is_pf': False}
 
-    return ParsedString(req)
+    return Requirement(req)
 
 
 def parse_hdd(hdd_str=''):
@@ -161,6 +132,15 @@ def parse_hdd(hdd_str=''):
     if trash:
         hdd['trash'] = trash.split(' ')
     return ParsedString(hdd)
+
+
+def _instantiate_reqs(temp_lot):
+    lot = {
+        'requirements': [parse_req(req) for req in temp_lot['reqs']],
+        'page_faults': [parse_req(pf) for pf in temp_lot['pfs']],
+        'movements': int(temp_lot['movs']) if temp_lot['movs'] else None
+    }
+    return lot
 
 
 def parse_lot(lot_str=''):
@@ -173,20 +153,27 @@ def parse_lot(lot_str=''):
 
     Example lot_str '*55 45 66 89 #33 some useless strings' would return
     ParsedString({
-    'reqs': ['45', '66', '89'],
-    'pfs': ['*55'],
-    'movs': '33',
-    'trash': ['some', 'useless', 'strings']
+        'reqs': ['45', '66', '89'],
+        'pfs': ['*55'],
+        'movs': '33',
+        'trash': ['some', 'useless', 'strings']
     })
     """
     lot = {'movs':  None,
            'pfs':   [],
            'trash': [],
            'reqs':  []}
+
     lot, lot_str = _parse_movs(lot, lot_str)
     lot, lot_str = _parse_pfs(lot, lot_str)
     lot, lot_str = _parse_reqs(lot, lot_str)
+
     if lot_str:
         lot['trash'] += lot_str.split(' ')
+    # _log(lot['trash'])
 
-    return ParsedString(lot)
+    return Lot(_instantiate_reqs(lot))
+
+
+def parse_simulation(simulation_json):
+    pass

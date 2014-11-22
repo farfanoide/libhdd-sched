@@ -1,4 +1,7 @@
-class Requirement(object):
+from parsed_string import ParsedString
+
+
+class Requirement(ParsedString):
     """
     Models a single requirement.
 
@@ -6,12 +9,10 @@ class Requirement(object):
     value (int)     -- Disk track number.
     is_pf (boolean) -- Wether it is a page fault or not.
     """
-    def __init__(self, value, is_pf=False):
-        self.is_pf = is_pf
-        self.value = int(value)
+    permitted_attributes = ['value', 'is_pf']
 
 
-class Lot(object):
-    pass
+class Lot(ParsedString):
+    permitted_attributes = ['requirements', 'page_faults', 'movements']
 
 
