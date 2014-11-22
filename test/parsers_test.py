@@ -36,7 +36,9 @@ class TestLotParser(unittest.TestCase):
         'numbers_words_symbols': '*45  09 tres 88 ilegal 456 #45',
         'two_hashtags': '#35  09 tres 88 ilegal 456 #45',
     }
-    lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
+
+    def setUp(self):
+        lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
 
     def test_parsed_lot_is_actual_lot(self):
         lot = parsers.parse_lot(self.invalid_data['empty'])
@@ -92,6 +94,7 @@ class TestParserHelpers(unittest.TestCase):
         'only_numbers': '5 90 34 88',
         'all': '34 *12 456 #230 *90',
     }
+
     def setUp(self):
         self.lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
 
@@ -129,21 +132,3 @@ class TestParserHelpers(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
-# def parse_simulation(json):
-# si json.has_key('simulations') parsear varias
-# sino
-#    parsear una
-# orden normal
-# json = json.loads(file.open(archivito))
-# simulation = parsers.parse_simulation(json)
-# Simulation.run('fcfs')
-#       -> algorithms.FCFS.resolve(self.lots)
-# js = json.loads('{\
-    #     "simulations": {\
-    #         "simulation_1": {"hdd": "sarasa", "position": 512},\
-    #         "simulation_1": {"hdd": "sarasa", "position": 512},\
-    #         "simulation_1": {"hdd": "sarasa", "position": 512}\
-    #     }\
-    # }')
