@@ -1,16 +1,20 @@
 {
-  "name": "protosimulation",
-  "direction": "right",
-  "position": 250,
-  "hdd": {
-    "name": "protodisk",
-    "tracks": 512,
-    "rpm": 5400,
-    "seek_time": 500
-  },
-  "lots": [
-    "53 151 *500 *400 33 353 100 #45",
-    "*100 455 15 #35",
-    "101 126 366 415"
+  "simulations": [
+  {
+    "name": "protosimulation",
+    "direction": "right",
+    "position": 250,
+    "hdd": {
+      "name": "protodisk",
+      "tracks": 512,
+      "rpm": 5400,
+      "seek_time": 500
+    },
+    "lots": [
+      "53 151 *500 *400 33 353 100 #45",
+      "*100 455 15 #35",
+      "101 126 366 415"
+      ]
+    }
   ]
 }

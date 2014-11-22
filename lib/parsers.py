@@ -7,11 +7,9 @@ pf_sym = re.compile('\*')       # Page Fault Symbol.
 movs_sym = re.compile('#')      # Initialization Movements Symbol.
 movs_full = re.compile('#\d+')  # Init Movements including number and symbol.
 pf_full = re.compile('\*\d+')   # Full Page Fault, including number and symbol.
-num_str = re.compile('\d+')             # Regular Requirement.
-whitespace = re.compile('\s+')          # Sequence of whitespaces.
-w_extremes = re.compile('^\s+|\s+$')    # Preceding and Trailing whitespaces.
-assignment = re.compile('(\w+)=(\w+)')  # Assignment expression.
-keyword_title = re.compile('^[A-Z]+\:')  # Keyword string title.
+num_str = re.compile('\d+')          # Regular Requirement.
+whitespace = re.compile('\s+')       # Sequence of whitespaces.
+w_extremes = re.compile('^\s+|\s+$') # Preceding and Trailing whitespaces.
 
 
 def _remove_extra_whitespaces(string):
@@ -91,24 +89,6 @@ def _parse_reqs(lot_dict, lot_str):
     return lot_dict, lot_str
 
 
-def parse_req(reqs_str=''):
-    """
-    Returns a ParsedString out of a simple string, ready to
-    instatiate a Requirement().
-
-    Keyword Arguments
-    reqs_str (string) -- String containing a number and optionally a symbol.
-    Example reqs_str '*55' would return
-    ParsedString({'requirement': 55, 'is_pf': True})
-    """
-    if pf_sym.match(reqs_str):
-        req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
-    else:
-        req = {'value': int(reqs_str), 'is_pf': False}
-
-    return Requirement(req)
-
-
 def _instantiate_reqs(temp_lot):
     lot = {
         'requirements': [parse_req(req) for req in temp_lot['reqs']],
@@ -148,6 +128,24 @@ def parse_lot(lot_str=''):
     # _log(lot['trash'])
 
     return Lot(_instantiate_reqs(lot))
+
+
+def parse_req(reqs_str=''):
+    """
+    Returns a ParsedString out of a simple string, ready to
+    instatiate a Requirement().
+
+    Keyword Arguments
+    reqs_str (string) -- String containing a number and optionally a symbol.
+    Example reqs_str '*55' would return
+    ParsedString({'requirement': 55, 'is_pf': True})
+    """
+    if pf_sym.match(reqs_str):
+        req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
+    else:
+        req = {'value': int(reqs_str), 'is_pf': False}
+
+    return Requirement(req)
 
 
 def parse_simulation(simulation_json):

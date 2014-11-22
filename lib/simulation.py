@@ -11,15 +11,17 @@ class ParsedString(object):
     """
 
     permitted_attributes = []
+    default_attributes = {}
 
     def __init__(self, data={}):
+        data = dict(self.default_attributes.items() + data.items())
         for key, value in data.iteritems():
             if self._is_valid_attribute(key):
                 setattr(self, key, value)
 
     def attribute_names(self):
         """ Returns a list with all attribute names for the current instance """
-        return self.__dict__.keys()
+        return sorted(self.__dict__.keys())
 
     def all_values(self):
         """ Returns a list of attribute's values for the current instance """
@@ -41,14 +43,6 @@ class ParsedString(object):
         return attribute in self.permitted_attributes
 
 
-class Simulation(ParsedString):
-    permitted_attributes = ['name', 'direction', 'position']
-
-
-class Hdd(ParsedString):
-    permitted_attributes = ['name', 'tracks', 'rpm', 'seek_time']
-
-
 class Requirement(ParsedString):
 
     """
@@ -63,3 +57,29 @@ class Requirement(ParsedString):
 
 class Lot(ParsedString):
     permitted_attributes = ['requirements', 'page_faults', 'movements']
+    default_attributes = {
+        'requirements': [],
+        'page_faultsl': [],
+        'movements': 0
+    }
+
+
+class Hdd(ParsedString):
+    permitted_attributes = ['name', 'tracks', 'rpm', 'seek_time']
+    default_attributes = {
+        'name': 'hdd',
+        'tracks': 512,
+        'rpm': 5400,
+        'seek_time': 500
+    }
+
+
+class Simulation(ParsedString):
+    permitted_attributes = ['name', 'direction', 'position']
+    default_attributes = {
+        'name': 'protosimulation',
+        'direction': True,
+        'position': 0,
+        'hdd': Hdd(),
+        'lots': []
+    }

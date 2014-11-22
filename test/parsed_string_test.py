@@ -5,6 +5,7 @@ from lib.simulation import ParsedString
 class TestParsedString(unittest.TestCase):
 
     ParsedString.permitted_attributes = ['a', 'b', 'c']
+    ParsedString.default_attributes = {'a': '', 'b': '', 'c': ''}
 
     values = {
         'empty': {'a': '', 'b': '', 'd': ''},
@@ -14,13 +15,21 @@ class TestParsedString(unittest.TestCase):
     def _empty_parsed_string(self):
         return ParsedString(self.values['empty'])
 
+    def test_default_attributes(self):
+        parsed = ParsedString()
+        self.assertListEqual(['a', 'b', 'c'], parsed.attribute_names())
+
+    def test_attributes_presedence(self):
+        parsed = ParsedString(self.values['with_values'])
+        self.assertListEqual(['4', '89', ''], [parsed.a, parsed.b, parsed.c])
+
     def test_attribute_names(self):
         parsed = self._empty_parsed_string()
-        self.assertListEqual(['a', 'b'], parsed.attribute_names())
+        self.assertListEqual(['a', 'b', 'c'], parsed.attribute_names())
 
     def test_all_values(self):
         parsed = ParsedString(self.values['with_values'])
-        self.assertListEqual(['4', '89'], parsed.all_values())
+        self.assertListEqual(['4', '', '89'], parsed.all_values())
 
     def test_is_empty(self):
         parsed = self._empty_parsed_string()
