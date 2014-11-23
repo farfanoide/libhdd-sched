@@ -1,6 +1,6 @@
 import unittest
 from lib import parsers
-from lib.simulation import Requirement, Lot
+from lib.simulation import Requirement, Lot, Hdd
 
 
 class TestReqParser(unittest.TestCase):
@@ -66,11 +66,9 @@ class TestLotParser(unittest.TestCase):
         lot = parsers.parse_lot(self.valid_data['symbols'])
         self.assertEqual(lot.movements, 30)
 
-
     def test_parses_first_movement_symbol(self):
         lot = parsers.parse_lot(self.mixed_data['two_hashtags'])
         self.assertEqual(lot.movements, 35)
-
 
     def test_parse_lot_amount_of_requirements(self):
         lot = parsers.parse_lot(self.mixed_data['numbers_words'])
@@ -128,6 +126,13 @@ class TestParserHelpers(unittest.TestCase):
         self.assertListEqual(
             self.lot_dict['reqs'], ['5', '90', '34', '88'])
         self.assertEqual(parsed_str, '')
+
+
+class TestHddParser(unittest.TestCase):
+
+    def test_parse_hdd(self):
+        hdd = parsers.parse_hdd()
+        self.assertIsInstance(hdd, Hdd)
 
 
 if __name__ == '__main__':

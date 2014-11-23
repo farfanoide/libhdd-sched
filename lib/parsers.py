@@ -148,5 +148,9 @@ def parse_req(reqs_str=''):
     return Requirement(req)
 
 
+def parse_hdd(hdd_dict={}):
+    return Hdd(hdd_dict)
+
+
 def parse_simulation(simulation_json):
     pass
