@@ -10,7 +10,6 @@ class ParsedString(object):
     data (dict) -- Dictionary containing attribute names and it's values
     """
 
-    permitted_attributes = []
     default_attributes = {}
 
     def __init__(self, data={}):
@@ -40,7 +39,10 @@ class ParsedString(object):
         attributes list
         """
 
-        return attribute in self.permitted_attributes
+        return attribute in self.permitted_attributes()
+
+    def permitted_attributes(self):
+        return self.default_attributes.keys()
 
 
 class Requirement(ParsedString):
@@ -52,20 +54,18 @@ class Requirement(ParsedString):
     value (int)     -- Disk track number.
     is_pf (boolean) -- Wether it is a page fault or not.
     """
-    permitted_attributes = ['value', 'is_pf']
+    default_attributes = { 'value': 0, 'is_pf': False }
 
 
 class Lot(ParsedString):
-    permitted_attributes = ['requirements', 'page_faults', 'movements']
     default_attributes = {
         'requirements': [],
-        'page_faultsl': [],
+        'page_faults': [],
         'movements': 0
     }
 
 
 class Hdd(ParsedString):
-    permitted_attributes = ['name', 'tracks', 'rpm', 'seek_time']
     default_attributes = {
         'name': 'hdd',
         'tracks': 512,
@@ -75,7 +75,6 @@ class Hdd(ParsedString):
 
 
 class Simulation(ParsedString):
-    permitted_attributes = ['name', 'direction', 'position']
     default_attributes = {
         'name': 'protosimulation',
         'direction': True,

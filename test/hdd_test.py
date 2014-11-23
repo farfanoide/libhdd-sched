@@ -20,7 +20,7 @@ class TestHdd(unittest.TestCase):
     }
 
     def test_hdd_data_types(self):
-        hdd = Hdd(self.data['strings'])
+        hdd = Hdd(self.data['valid'])
         self.assertIsInstance(hdd.tracks, int)
 
 if __name__ == '__main__':

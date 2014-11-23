@@ -4,7 +4,6 @@ from lib.simulation import ParsedString
 
 class TestParsedString(unittest.TestCase):
 
-    ParsedString.permitted_attributes = ['a', 'b', 'c']
     ParsedString.default_attributes = {'a': '', 'b': '', 'c': ''}
 
     values = {
