@@ -143,5 +143,11 @@ class TestSimulationParser(unittest.TestCase):
         simulation = parsers.parse_simulation(simulation_dict)
         self.assertIsInstance(simulation, Simulation)
 
+    def test_simulations_parser(self):
+        simulations_dict = json.loads(file.read(open('./examples/multiple.json')))
+        simulations = parsers.parse_simulations(simulations_dict['simulations'])
+        self.assertEqual(len(simulations), 2)
+
+
 if __name__ == '__main__':
     unittest.main()
