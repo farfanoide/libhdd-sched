@@ -21,7 +21,6 @@ def _remove_extra_whitespaces(string):
     """
     return whitespace.sub(' ', w_extremes.sub('', string))
 
-
 def _parse_movs(lot_dict, lot_str):
     """
     Parses Initialization Movements out of a string and returns them as a
@@ -46,7 +45,6 @@ def _parse_movs(lot_dict, lot_str):
 
     return lot_dict, lot_str
 
-
 def _parse_pfs(lot_dict, lot_str):
     """
     Parses Page Faults out of a string and returns them as a list
@@ -64,7 +62,6 @@ def _parse_pfs(lot_dict, lot_str):
 
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
-
 
 def _parse_reqs(lot_dict, lot_str):
     """
@@ -88,15 +85,13 @@ def _parse_reqs(lot_dict, lot_str):
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
 
-
 def _instantiate_reqs(temp_lot):
     lot = {
         'requirements': [parse_req(req) for req in temp_lot['reqs']],
         'page_faults': [parse_req(pf) for pf in temp_lot['pfs']],
-        'movements': int(temp_lot['movs']) if temp_lot['movs'] else None
+        'movements': int(temp_lot['movs']) if temp_lot['movs'] else 0
     }
     return lot
-
 
 def parse_lot(lot_str=''):
     """
@@ -114,7 +109,7 @@ def parse_lot(lot_str=''):
         'trash': ['some', 'useless', 'strings']
     })
     """
-    lot = {'movs':  None,
+    lot = {'movs':  0,
            'pfs':   [],
            'trash': [],
            'reqs':  []}
@@ -129,6 +124,8 @@ def parse_lot(lot_str=''):
 
     return Lot(_instantiate_reqs(lot))
 
+def parse_lots(lots):
+    return [parse_lot(lot_str) for lot_str in lots]
 
 def parse_req(reqs_str=''):
     """
@@ -147,10 +144,22 @@ def parse_req(reqs_str=''):
 
     return Requirement(req)
 
-
 def parse_hdd(hdd_dict={}):
     return Hdd(hdd_dict)
 
-
 def parse_simulation(simulation_json):
     pass
+
+def generic_parser(stuff):
+    """ Stuff comes in... stuff goes out"""
+    return stuff
+
+def parse_int(integer):
+    return int(integer)
+
+def parse_str(string):
+    return str(string)
+
+def parse_bool(boolean):
+    # TODO: add some regex matching for strings representing False
+    return bool(boolean)

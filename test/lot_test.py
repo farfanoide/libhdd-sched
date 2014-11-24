@@ -1,24 +1,20 @@
 import unittest
-from lib.simulation import Requirement
+from lib import parsers
+from lib.simulation import Requirement, Lot
 
 
-class TestRequirement(unittest.TestCase):
+class TestLot(unittest.TestCase):
 
-    page_fault  = {'value': 4, 'is_pf': True}
-    regular_req = {'value': 4, 'is_pf': False}
+    data = {
+        'only_numbers': '5 90 34 88',
+        'only_pfs': '*34 *76 *32 *342',
+        'numbers_pfs': '34 *12 456 230 *90',
+        'symbols': '#30',
+    }
 
-    def test_value_type(self):
-        req = Requirement(self.page_fault)
-        self.assertIsInstance(req.value, int)
-
-    def test_is_not_pf(self):
-        req = Requirement(self.regular_req)
-        self.assertFalse(req.is_pf)
-
-    def test_is_pf(self):
-        req = Requirement(self.page_fault)
-        self.assertTrue(req.is_pf)
-
+    def test_lot_type(self):
+        lot = parsers.parse_lot(self.data['numbers_pfs'])
+        self.assertIsInstance(lot, Lot)
 
 if __name__ == '__main__':
     unittest.main()

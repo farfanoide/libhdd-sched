@@ -46,6 +46,7 @@ class TestLotParser(unittest.TestCase):
 
     def test_parsed_lot_requirements(self):
         lot = parsers.parse_lot(self.valid_data['only_numbers'])
+        print lot.requirements
         for req in lot.requirements:
             self.assertIsInstance(req, Requirement)
 

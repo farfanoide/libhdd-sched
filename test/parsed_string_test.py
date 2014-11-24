@@ -1,4 +1,5 @@
 import unittest
+from lib import parsers
 from lib.simulation import ParsedString
 
 
@@ -42,3 +43,16 @@ class TestParsedString(unittest.TestCase):
         parsed_string = ParsedString()
         self.assertTrue(parsed_string._is_valid_attribute('a'))
         self.assertFalse(parsed_string._is_valid_attribute('d'))
+
+    def test_generic_parser_name(self):
+        attr_name = ParsedString()._generic_parser_name('a')
+        self.assertEquals('parse_str', attr_name)
+
+    def test_object_parser_name(self):
+        attr_name = ParsedString()._object_parser_name('a')
+        self.assertEqual('parse_a', attr_name)
+
+    def test_get_parser(self):
+        parser = ParsedString()._get_parser('lots')
+        self.assertEqual(parser, parsers.parse_lots)
+

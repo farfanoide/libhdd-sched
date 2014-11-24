@@ -1,3 +1,6 @@
+import parsers
+
+
 class ParsedString(object):
 
     """
@@ -13,10 +16,10 @@ class ParsedString(object):
     default_attributes = {}
 
     def __init__(self, data={}):
-        data = dict(self.default_attributes.items() + data.items())
-        for key, value in data.iteritems():
-            if self._is_valid_attribute(key):
-                setattr(self, key, value)
+        data = self._remove_invalid_attributes(data)
+        data = self._instantiate_attributes(data)
+        data = self._merge_default_attributes(data)
+        self._set_attributes(data)
 
     def attribute_names(self):
         """ Returns a list with all attribute names for the current instance """
@@ -33,6 +36,9 @@ class ParsedString(object):
         """
         return not(any(self.all_values()))
 
+    def permitted_attributes(self):
+        return self.default_attributes.keys()
+
     def _is_valid_attribute(self, attribute):
         """
         Returns True if a given attribute name is found inside the permitted
@@ -41,8 +47,52 @@ class ParsedString(object):
 
         return attribute in self.permitted_attributes()
 
-    def permitted_attributes(self):
-        return self.default_attributes.keys()
+    def _merge_default_attributes(self, attrs_dict):
+        return dict(self.default_attributes, **attrs_dict)
+
+    def _remove_invalid_attributes(self, attrs_dict):
+        # TODO: missing tests
+        sanitized = attrs_dict.copy()
+        permitted_attributes = self.permitted_attributes()
+        for attr_name, value in attrs_dict.iteritems():
+            if not attr_name in permitted_attributes:
+                sanitized.pop(attr_name)
+        return sanitized
+
+    def _generic_parser_name(self, attr_name):
+        # TODO: missing tests
+        return 'parse_' + str(
+            self.default_attributes[attr_name].__class__.__name__)
+
+    def _object_parser_name(self, attr_name):
+        # TODO: missing tests
+        return 'parse_' + attr_name
+
+    def _get_parser(self, attr_name):
+        parser_name = self._object_parser_name(attr_name)
+        if not hasattr(parsers, parser_name):
+            parser_name = self._generic_parser_name(attr_name)
+        parser = getattr(parsers, parser_name, parsers.generic_parser)
+        return parser
+
+    def _instantiate_attribute(self, attr):
+        # TODO: missing tests
+        attr_name, value = attr
+        parser = self._get_parser(attr_name)
+        return parser(value)
+
+    def _instantiate_attributes(self, attrs_dict):
+        # TODO: missing tests
+        validated = {}
+        for attr, value in attrs_dict.iteritems():
+            attribute = self._instantiate_attribute((attr, value))
+            if attr:
+                validated[attr] = attribute
+        return validated
+
+    def _set_attributes(self, attrs_dict):
+        for key, value in attrs_dict.iteritems():
+            setattr(self, key, value)
 
 
 class Requirement(ParsedString):
