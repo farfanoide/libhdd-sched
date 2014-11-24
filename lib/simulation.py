@@ -39,6 +39,9 @@ class ParsedString(object):
     def permitted_attributes(self):
         return self.default_attributes.keys()
 
+    def attributes(self):
+        return self.__dict__
+
     def _is_valid_attribute(self, attribute):
         """
         Returns True if a given attribute name is found inside the permitted
@@ -69,6 +72,13 @@ class ParsedString(object):
         return 'parse_' + attr_name
 
     def _get_parser(self, attr_name):
+        """
+        Get a parser function based on default_attributes.
+        Logic is as follows:
+            - Try to get a specific parser for an object
+            - Try to get a standard data type parser
+            - If no parser was found, return generic_parser
+        """
         parser_name = self._object_parser_name(attr_name)
         if not hasattr(parsers, parser_name):
             parser_name = self._generic_parser_name(attr_name)
