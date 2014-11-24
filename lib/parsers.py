@@ -138,6 +138,8 @@ def parse_hdd(hdd_dict={}):
 def parse_simulation(simulation_dict={}):
     return Simulation(simulation_dict)
 
+def parse_simulations(simulations):
+    return [parse_simulation(simulation_str) for simulation_str in simulations]
 def generic_parser(stuff):
     """ Stuff comes in... stuff goes out"""
     return stuff
