@@ -1,6 +1,6 @@
 HDD Scheduling Algorithms Library
 =================================
-
+![travis status](https://travis-ci.org/farfanoide/libhdd-sched.svg?branch=master)
 General purpose library for simulating various disk scheduling algorithms
 
 Currently supported algorithms:

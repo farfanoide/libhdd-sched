@@ -44,7 +44,6 @@ class ParsedString(object):
         Returns True if a given attribute name is found inside the permitted
         attributes list
         """
-
         return attribute in self.permitted_attributes()
 
     def _merge_default_attributes(self, attrs_dict):
