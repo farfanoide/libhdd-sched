@@ -1,5 +1,5 @@
 import re
-from simulation import Requirement, Lot, Hdd
+from simulation import Requirement, Lot, Hdd, Simulation
 
 
 # Regular Expressions used to parse input into usable lists.
@@ -71,7 +71,7 @@ def _parse_reqs(lot_dict, lot_str):
     Movements have already been extracted.
 
     Keyword Arguments
-    lot_dict (dict)   -- Dictionary containing basic data tu create a Lot()
+    lot_dict (dict)   -- Dictionary containing basic data to create a Lot()
     lot_str  (string) -- Data string to parse
 
     Example lot_str input '45 #34' would return ['45', '34']
@@ -87,27 +87,18 @@ def _parse_reqs(lot_dict, lot_str):
 
 def _instantiate_reqs(temp_lot):
     lot = {
-        'requirements': [parse_req(req) for req in temp_lot['reqs']],
-        'page_faults': [parse_req(pf) for pf in temp_lot['pfs']],
+        'requirements': [parse_requirement(req) for req in temp_lot['reqs']],
+        'page_faults': [parse_requirement(pf) for pf in temp_lot['pfs']],
         'movements': int(temp_lot['movs']) if temp_lot['movs'] else 0
     }
     return lot
 
 def parse_lot(lot_str=''):
     """
-    Returns a ParsedString out of a simple string, ready to
-    instantiate a Lot().
+    Parses and instantiates a Lot from a string.
 
     Keyword Arguments
-    lot_str (string) -- String containing a number and optionally a symbol.
-
-    Example lot_str '*55 45 66 89 #33 some useless strings' would return
-    ParsedString({
-        'reqs': ['45', '66', '89'],
-        'pfs': ['*55'],
-        'movs': '33',
-        'trash': ['some', 'useless', 'strings']
-    })
+    lot_str (string) -- String containing requirements.
     """
     lot = {'movs':  0,
            'pfs':   [],
@@ -127,15 +118,12 @@ def parse_lot(lot_str=''):
 def parse_lots(lots):
     return [parse_lot(lot_str) for lot_str in lots]
 
-def parse_req(reqs_str=''):
+def parse_requirement(reqs_str=''):
     """
-    Returns a ParsedString out of a simple string, ready to
-    instatiate a Requirement().
+    Parses and instantiates a Requirement out of a string.
 
     Keyword Arguments
     reqs_str (string) -- String containing a number and optionally a symbol.
-    Example reqs_str '*55' would return
-    ParsedString({'requirement': 55, 'is_pf': True})
     """
     if pf_sym.match(reqs_str):
         req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
@@ -147,8 +135,8 @@ def parse_req(reqs_str=''):
 def parse_hdd(hdd_dict={}):
     return Hdd(hdd_dict)
 
-def parse_simulation(simulation_json):
-    pass
+def parse_simulation(simulation_dict={}):
+    return Simulation(simulation_dict)
 
 def generic_parser(stuff):
     """ Stuff comes in... stuff goes out"""

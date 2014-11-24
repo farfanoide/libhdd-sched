@@ -19,6 +19,11 @@ class TestParsedString(unittest.TestCase):
         parsed = ParsedString()
         self.assertListEqual(['a', 'b', 'c'], parsed.attribute_names())
 
+    def test_remove_invalid_attributes(self):
+        sanitized = ParsedString()._remove_invalid_attributes(
+            self.values['with_values'])
+        self.assertEquals({'a': '4', 'b': '89'}, sanitized)
+
     def test_attributes_presedence(self):
         parsed = ParsedString(self.values['with_values'])
         self.assertListEqual(['4', '89', ''], [parsed.a, parsed.b, parsed.c])
@@ -55,4 +60,3 @@ class TestParsedString(unittest.TestCase):
     def test_get_parser(self):
         parser = ParsedString()._get_parser('lots')
         self.assertEqual(parser, parsers.parse_lots)
-

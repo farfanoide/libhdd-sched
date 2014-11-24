@@ -4,10 +4,10 @@ import parsers
 class ParsedString(object):
 
     """
-    Simple dynamic data object to be instatiated based off of a dictionary.
-    Any subclass should set a whitelist of permitted attributes in it's class
-    variable 'permitted_attributes'
-
+    Base class for all simulation objects.
+    - Subclasses must define their basic structure in default_attributes.
+    - Validations will be performed based off of these attributes and their
+    values by the parsers module.
 
     Keyword arguments
     data (dict) -- Dictionary containing attribute names and it's values
@@ -48,10 +48,13 @@ class ParsedString(object):
         return attribute in self.permitted_attributes()
 
     def _merge_default_attributes(self, attrs_dict):
+        """
+        Merge default_attributes with initialization dict giving precedence to
+        the latter
+        """
         return dict(self.default_attributes, **attrs_dict)
 
     def _remove_invalid_attributes(self, attrs_dict):
-        # TODO: missing tests
         sanitized = attrs_dict.copy()
         permitted_attributes = self.permitted_attributes()
         for attr_name, value in attrs_dict.iteritems():
@@ -60,12 +63,10 @@ class ParsedString(object):
         return sanitized
 
     def _generic_parser_name(self, attr_name):
-        # TODO: missing tests
         return 'parse_' + str(
             self.default_attributes[attr_name].__class__.__name__)
 
     def _object_parser_name(self, attr_name):
-        # TODO: missing tests
         return 'parse_' + attr_name
 
     def _get_parser(self, attr_name):

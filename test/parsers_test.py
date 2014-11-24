@@ -1,44 +1,45 @@
 import unittest
+import json
 from lib import parsers
-from lib.simulation import Requirement, Lot, Hdd
+from lib.simulation import Requirement, Lot, Hdd, Simulation
 
 
-class TestReqParser(unittest.TestCase):
+class TestRequirementParser(unittest.TestCase):
 
     def test_not_pf_and_value(self):
         """ Test regular requirement """
-        parsed = parsers.parse_req('4')
+        parsed = parsers.parse_requirement('4')
         self.assertEquals(parsed.value, 4, 'Parsed number error.')
         self.assertFalse(parsed.is_pf, 'Parsed page fault error.')
 
     def test_pf_and_value(self):
         """ Test page fault requirement """
-        parsed = parsers.parse_req('*448')
+        parsed = parsers.parse_requirement('*448')
         self.assertEquals(parsed.value, 448, 'Parsed number error.')
         self.assertTrue(parsed.is_pf, 'Parsed page fault error.')
 
 
 class TestLotParser(unittest.TestCase):
 
-    invalid_data = {
-        'empty': '',
-        'only_words': 'no numbers here',
-        'symbols': '*yo #mamma so* fat# ** ## ***',
-    }
+    invalid_data = {'empty': ''}
     valid_data = {
         'only_numbers': '5 90 34 88',
         'only_pfs': '*34 *76 *32 *342',
         'numbers_pfs': '34 *12 456 230 *90',
         'symbols': '#30',
+        'various': [
+            '34 *12 456 230 *90 #40',
+            '44 56 *20 400',
+        ]
     }
     mixed_data = {
         'numbers_words': '45 09 tres 88 ilegal 456',
-        'numbers_words_symbols': '*45  09 tres 88 ilegal 456 #45',
         'two_hashtags': '#35  09 tres 88 ilegal 456 #45',
     }
 
     def setUp(self):
         lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
+
 
     def test_parsed_lot_is_actual_lot(self):
         lot = parsers.parse_lot(self.invalid_data['empty'])
@@ -75,17 +76,16 @@ class TestLotParser(unittest.TestCase):
         lot = parsers.parse_lot(self.mixed_data['numbers_words'])
         self.assertEqual(len(lot.requirements), 4)
 
+    def test_lots_parser(self):
+        lots = parsers.parse_lots(self.valid_data['various'])
+        self.assertIsInstance(lots, list)
+        for lot in lots:
+            self.assertIsInstance(lot, Lot)
+
 
 class TestParserHelpers(unittest.TestCase):
 
-    hdd_dict = {
-        'tracks': '512',
-        'rpm': '5400',
-        'seek_time': '500',
-        'name': 'protodisk'
-    }
     invalid_data = {
-        'empty': '',
         'multi_whitespace': '    34   *12     456 230 *90  '
     }
     valid_data = {
@@ -135,6 +135,13 @@ class TestHddParser(unittest.TestCase):
         hdd = parsers.parse_hdd()
         self.assertIsInstance(hdd, Hdd)
 
+
+class TestSimulationParser(unittest.TestCase):
+
+    def test_simulation_parser(self):
+        simulation_dict = json.loads(file.read(open('./examples/protosimulation.json')))
+        simulation = parsers.parse_simulation(simulation_dict)
+        self.assertIsInstance(simulation, Simulation)
 
 if __name__ == '__main__':
     unittest.main()
