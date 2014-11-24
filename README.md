@@ -1,7 +1,10 @@
-# HDD Scheduling Algorithms Library
+HDD Scheduling Algorithms Library
+=================================
+
 General purpose library for simulating various disk scheduling algorithms
 
-## Currently supported algorithms:
+Currently supported algorithms:
+-------------------------------
 - [ ] FIFO
 - [ ] FCFS
 - [ ] SCAN
@@ -9,20 +12,40 @@ General purpose library for simulating various disk scheduling algorithms
 - [ ] LOOK
 - [ ] CLOOK
 
-## Usage:
+Usage:
+------
 
-## Contributing:
+Dependencies:
+-------------
 
-### Dependencies:
 Usage of virtualenv is encouraged.
 
-Install dependencies from REQUIREMENTS like this:
+Install dependencies from REQUIREMENTS via `pip`:
 
-    $ pip install -r REQUIREMENTS
+```bash
+pip install -r REQUIREMENTS
+```
 
-### Tests:
+Tests:
+------
+
 Navigate to the projects root directory and execute:
 
-    $ py.test
+```bash
+py.test
+```
 
+License:
+--------
+
+See the [LICENSE](LICENSE).
+
+Contributing:
+-------------
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
 
