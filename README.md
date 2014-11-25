@@ -15,6 +15,15 @@ Currently supported algorithms:
 Usage:
 ------
 
+The interface is still being touched but ideally you should be able to
+instantiate a simulation and run it like so:
+
+```python
+example = json.loads(file.read(open('./examples/protosimulation.json')))
+simulation = Simulation(example)
+simulation.run('FCFS')
+```
+
 Dependencies:
 -------------
 
