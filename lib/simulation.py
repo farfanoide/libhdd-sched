@@ -62,7 +62,7 @@ class ParsedString(object):
         for attr_name, value in attrs_dict.iteritems():
             if not attr_name in permitted_attributes:
                 sanitized.pop(attr_name)
-        return sanitized
+                return sanitized
 
     def _generic_parser_name(self, attr_name):
         return 'parse_' + str(
@@ -82,8 +82,8 @@ class ParsedString(object):
         parser_name = self._object_parser_name(attr_name)
         if not hasattr(parsers, parser_name):
             parser_name = self._generic_parser_name(attr_name)
-        parser = getattr(parsers, parser_name, parsers.generic_parser)
-        return parser
+            parser = getattr(parsers, parser_name, parsers.generic_parser)
+            return parser
 
     def _instantiate_attribute(self, attr):
         # TODO: missing tests
@@ -94,11 +94,12 @@ class ParsedString(object):
     def _instantiate_attributes(self, attrs_dict):
         # TODO: missing tests
         validated = {}
+        print self
         for attr, value in attrs_dict.iteritems():
             attribute = self._instantiate_attribute((attr, value))
-            if attr:
+            if attribute:
                 validated[attr] = attribute
-        return validated
+                return validated
 
     def _set_attributes(self, attrs_dict):
         for key, value in attrs_dict.iteritems():
@@ -111,18 +112,27 @@ class Requirement(ParsedString):
     Models a single requirement.
 
     Attributes:
-    value (int)     -- Disk track number.
-    is_pf (boolean) -- Wether it is a page fault or not.
+        value (int)     -- Disk track number.
+        is_pf (boolean) -- Wether it is a page fault or not.
     """
-    default_attributes = { 'value': 0, 'is_pf': False }
+    default_attributes = {'value': 0, 'is_pf': False}
 
 
 class Lot(ParsedString):
     default_attributes = {
         'requirements': [],
-        'page_faults': [],
         'movements': 0
     }
+
+    def page_faults(self):
+        pfs = []
+        for req in self.requirements:
+            if req.is_pf:
+                pfs += [req]
+        return pfs
+
+    def regular_reqs(self):
+        pass
 
 
 class Hdd(ParsedString):

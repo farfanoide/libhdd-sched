@@ -22,7 +22,11 @@ class TestHdd(unittest.TestCase):
 
     def test_hdd_data_types(self):
         hdd = Hdd(self.data['valid'])
+        self.assertIsInstance(hdd.name, str)
         self.assertIsInstance(hdd.tracks, int)
+        self.assertIsInstance(hdd.rpm, int)
+        self.assertIsInstance(hdd.seek_time, int)
+
 
 if __name__ == '__main__':
     unittest.main()

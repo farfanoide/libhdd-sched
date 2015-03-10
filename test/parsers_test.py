@@ -41,7 +41,7 @@ class TestLotParser(unittest.TestCase):
         lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
 
 
-    def test_parsed_lot_is_actual_lot(self):
+    def test_parsed_lot_returns_lot_instance(self):
         lot = parsers.parse_lot(self.invalid_data['empty'])
         self.assertIsInstance(lot, Lot)
 
@@ -138,14 +138,20 @@ class TestHddParser(unittest.TestCase):
 
 class TestSimulationParser(unittest.TestCase):
 
+    simulation_dict = json.loads(file.read(open('./examples/protosimulation.json')))
+    simulations_dict = json.loads(file.read(open('./examples/multiple.json')))
+
     def test_simulation_parser(self):
-        simulation_dict = json.loads(file.read(open('./examples/protosimulation.json')))
-        simulation = parsers.parse_simulation(simulation_dict)
+        simulation = parsers.parse_simulation(self.simulation_dict)
         self.assertIsInstance(simulation, Simulation)
 
-    def test_simulations_parser(self):
-        simulations_dict = json.loads(file.read(open('./examples/multiple.json')))
-        simulations = parsers.parse_simulations(simulations_dict['simulations'])
+    def test_simulations_parser_retunrns_only_simulations(self):
+        simulations = parsers.parse_simulations(self.simulations_dict['simulations'])
+        for simulation in simulations:
+            self.assertIsInstance(simulation, Simulation)
+
+    def test_simulations_parser_returns_proper_amount_of_simulations(self):
+        simulations = parsers.parse_simulations(self.simulations_dict['simulations'])
         self.assertEqual(len(simulations), 2)
 
 

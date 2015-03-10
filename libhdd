@@ -1,6 +1,4 @@
-
 new_session -n 'Editor'
-
 
 send_line 'Editor' ${EDITOR:-vi}
 split 'Editor' -v -p 25

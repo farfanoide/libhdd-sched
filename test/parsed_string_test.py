@@ -60,3 +60,8 @@ class TestParsedString(unittest.TestCase):
     def test_get_parser(self):
         parser = ParsedString()._get_parser('lots')
         self.assertEqual(parser, parsers.parse_lots)
+
+    def test_get_parser_returns_generic_parser(self):
+        parser = ParsedString()._get_parser('a')
+        self.assertEqual(parser, parsers.parse_str)
+

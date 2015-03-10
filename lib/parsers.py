@@ -114,7 +114,6 @@ def parse_lot(lot_str=''):
     # _log(lot['trash'])
 
     return Lot(_instantiate_reqs(lot))
-
 def parse_lots(lots):
     return [parse_lot(lot_str) for lot_str in lots]
 
@@ -141,8 +140,8 @@ def parse_simulation(simulation_dict={}):
 def parse_simulations(simulations):
     return [parse_simulation(simulation_str) for simulation_str in simulations]
 def generic_parser(stuff):
-    """ Stuff comes in... stuff goes out"""
-    return stuff
+    """ Do not know how to parse you bitch """
+    return None
 
 def parse_int(integer):
     return int(integer)
@@ -153,3 +152,28 @@ def parse_str(string):
 def parse_bool(boolean):
     # TODO: add some regex matching for strings representing False
     return bool(boolean)
+def parse_list(some_list):
+    return some_list
+
+
+# thoughts on lots:
+#     all ParsedStrings should be able to be re-encoded to json
+#     lots don't keep original order when parsed
+
+# def _matches_req_str(req_str):
+#     req_regex = re.compile('^\*?\d+$')
+#     return req_regex.match(req_str)
+
+# def _remove_non_reqs(reqs_list):
+#     print reqs_list
+#     sanitized = reqs_list.copy()
+#     print sanitized
+#     for req_str in reqs_list:
+#         if not _matches_req_str(req_str):
+#             sanitized.remove(req_str)
+#
+# def parse_lot(lot_str=''):
+#     lot_str = _remove_extra_whitespaces(lot_str)
+#     lot_str_list = lot_str.split(' ')
+#     lot_str_list = _remove_non_reqs(lot_str_list)
+#     return  [parse_req(req_str) for req_str in lot_str_list]
