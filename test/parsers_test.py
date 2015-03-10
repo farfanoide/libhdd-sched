@@ -111,18 +111,6 @@ class TestParserHelpers(unittest.TestCase):
         self.assertEqual(movs, 0)
         self.assertEqual(parsed_str, self.valid_data['only_numbers'])
 
-    def test_parse_pfs_helper(self):
-        lot_dict, parsed_str = parsers._parse_pfs(
-            self.lot_dict, self.valid_data['only_pfs'])
-        self.assertListEqual(lot_dict['pfs'], ['*34', '*76', '*32', '*342'])
-        self.assertEqual(parsed_str, '')
-
-    def test_parse_requirements(self):
-        self.lot_dict, parsed_str = parsers._parse_reqs(
-            self.lot_dict, self.valid_data['only_numbers'])
-        self.assertListEqual(
-            self.lot_dict['reqs'], ['5', '90', '34', '88'])
-        self.assertEqual(parsed_str, '')
 
         def test_matches_req_regex(self):
             self.assertTrue(parsers._matches_req_str('*34'))

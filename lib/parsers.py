@@ -46,48 +46,6 @@ def _parse_movs(lot_str):
     return movs, lot_str
 
 
-def _parse_pfs(lot_dict, lot_str):
-    """
-    Parses Page Faults out of a string and returns them as a list
-
-    Keyword Arguments
-    lot_dict (dict)   -- Dictionary containing basic data tu create a Lot()
-    lot_str  (string) -- Data string to parse
-
-    Example lot_str input '*45 34' would return ['*45'] inside lot_dict['pfs']
-    """
-    pfs = pf_full.findall(lot_str)
-    if pfs:
-        lot_dict['pfs'] = pfs
-        lot_str = pf_full.sub('', lot_str)
-
-    lot_str = _remove_extra_whitespaces(lot_str)
-    return lot_dict, lot_str
-
-
-def _parse_reqs(lot_dict, lot_str):
-    """
-    Parses regular requirements out of a string and returns them as a list.
-    Regular requirements are basically just numbers, thus it is intended to run
-    this method on a string from which all Page Faults and Initialization
-    Movements have already been extracted.
-
-    Keyword Arguments
-    lot_dict (dict)   -- Dictionary containing basic data to create a Lot()
-    lot_str  (string) -- Data string to parse
-
-    Example lot_str input '45 #34' would return ['45', '34']
-    inside lot_dict['reqs'].
-    """
-    reqs = num_str.findall(lot_str)
-    if reqs:
-        lot_dict['reqs'] = reqs
-        lot_str = num_str.sub('', lot_str)
-
-    lot_str = _remove_extra_whitespaces(lot_str)
-    return lot_dict, lot_str
-
-
 def _instantiate_reqs(temp_lot):
     lot = {
         'requirements': [parse_requirement(req) for req in temp_lot['reqs']],
@@ -95,32 +53,6 @@ def _instantiate_reqs(temp_lot):
         'movements': int(temp_lot['movs']) if temp_lot['movs'] else 0
     }
     return lot
-
-# def parse_lot(lot_str=''):
-#     """
-#     Parses and instantiates a Lot from a string.
-#
-#     Keyword Arguments
-#     lot_str (string) -- String containing requirements.
-#     """
-#     lot = {'movs':  0,
-#            'pfs':   [],
-#            'trash': [],
-#            'reqs':  []}
-#
-#     lot, lot_str = _parse_movs(lot, lot_str)
-#     lot, lot_str = _parse_pfs(lot, lot_str)
-#     lot, lot_str = _parse_reqs(lot, lot_str)
-#
-#     if lot_str:
-#         lot['trash'] += lot_str.split(' ')
-# _log(lot['trash'])
-#
-#     return Lot(_instantiate_reqs(lot))
-
-
-def parse_lots(lots):
-    return [parse_lot(lot_str) for lot_str in lots]
 
 
 def parse_requirement(reqs_str=''):
@@ -190,10 +122,20 @@ def _remove_non_reqs(reqs_list):
 
 
 def parse_lot(lot_str=''):
+    """
+    Parses and instantiates a Lot from a string.
+
+    Keyword Arguments
+    lot_str (string) -- String containing requirements.
+    """
     lot_dict = {'requirements':  []}
     lot_str = _remove_extra_whitespaces(lot_str)
     lot_dict['movements'], lot_str = _parse_movs(lot_str)
     lot_str_list = _remove_non_reqs(lot_str.split(' '))
     lot_dict['requirements'] = [parse_requirement(req_str) for req_str in lot_str_list]
     return Lot(lot_dict)
+
+
+def parse_lots(lots):
+    return [parse_lot(lot_str) for lot_str in lots]
 
