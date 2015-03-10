@@ -62,7 +62,7 @@ class ParsedString(object):
         for attr_name, value in attrs_dict.iteritems():
             if not attr_name in permitted_attributes:
                 sanitized.pop(attr_name)
-                return sanitized
+        return sanitized
 
     def _generic_parser_name(self, attr_name):
         return 'parse_' + str(
@@ -82,8 +82,8 @@ class ParsedString(object):
         parser_name = self._object_parser_name(attr_name)
         if not hasattr(parsers, parser_name):
             parser_name = self._generic_parser_name(attr_name)
-            parser = getattr(parsers, parser_name, parsers.generic_parser)
-            return parser
+        parser = getattr(parsers, parser_name, parsers.generic_parser)
+        return parser
 
     def _instantiate_attribute(self, attr):
         # TODO: missing tests
@@ -99,7 +99,7 @@ class ParsedString(object):
             attribute = self._instantiate_attribute((attr, value))
             if attribute:
                 validated[attr] = attribute
-                return validated
+        return validated
 
     def _set_attributes(self, attrs_dict):
         for key, value in attrs_dict.iteritems():

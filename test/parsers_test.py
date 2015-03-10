@@ -58,7 +58,7 @@ class TestLotParser(unittest.TestCase):
     def test_parse_lot_with_only_pfs(self):
         # TODO: bdd this shit -> test that req parser is called
         lot = parsers.parse_lot(self.valid_data['only_pfs'])
-        self.assertEqual(len(lot.page_faults), 4)
+        self.assertEqual(len(lot.page_faults()), 4)
 
     def test_empty_data(self):
         lot = parsers.parse_lot(self.invalid_data['empty'])
