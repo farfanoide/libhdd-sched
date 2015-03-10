@@ -40,14 +40,12 @@ class TestLotParser(unittest.TestCase):
     def setUp(self):
         lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
 
-
     def test_parsed_lot_returns_lot_instance(self):
         lot = parsers.parse_lot(self.invalid_data['empty'])
         self.assertIsInstance(lot, Lot)
 
     def test_parsed_lot_requirements(self):
         lot = parsers.parse_lot(self.valid_data['only_numbers'])
-        print lot.requirements
         for req in lot.requirements:
             self.assertIsInstance(req, Requirement)
 
@@ -86,7 +84,8 @@ class TestLotParser(unittest.TestCase):
 class TestParserHelpers(unittest.TestCase):
 
     invalid_data = {
-        'multi_whitespace': '    34   *12     456 230 *90  '
+        'multi_whitespace': '    34   *12     456 230 *90  ',
+        'non_reqs_list': ['34', '*45', 'hola', 'chau']
     }
     valid_data = {
         'only_pfs': '*34 *76 *32 *342',
@@ -97,22 +96,19 @@ class TestParserHelpers(unittest.TestCase):
     def setUp(self):
         self.lot_dict = {'movs': None, 'pfs': [], 'trash': [], 'reqs': []}
 
-
     def test_remove_extra_whitespaces_helper(self):
         parsed_str = parsers._remove_extra_whitespaces(
             self.invalid_data['multi_whitespace'])
         self.assertEqual(parsed_str, '34 *12 456 230 *90')
 
     def test_parse_movs_helper(self):
-        lot_dict, parsed_str = parsers._parse_movs(
-            self.lot_dict, self.valid_data['all'])
-        self.assertEqual(lot_dict['movs'], '230')
+        movs, parsed_str = parsers._parse_movs(self.valid_data['all'])
+        self.assertEqual(movs, '230')
         self.assertEqual(parsed_str, '34 *12 456 *90')
 
     def test_parse_movs_helper_without_movs(self):
-        lot_dict, parsed_str = parsers._parse_movs(
-            self.lot_dict, self.valid_data['only_numbers'])
-        self.assertIsNone(lot_dict['movs'])
+        movs, parsed_str = parsers._parse_movs(self.valid_data['only_numbers'])
+        self.assertEqual(movs, 0)
         self.assertEqual(parsed_str, self.valid_data['only_numbers'])
 
     def test_parse_pfs_helper(self):
@@ -128,6 +124,21 @@ class TestParserHelpers(unittest.TestCase):
             self.lot_dict['reqs'], ['5', '90', '34', '88'])
         self.assertEqual(parsed_str, '')
 
+        def test_matches_req_regex(self):
+            self.assertTrue(parsers._matches_req_str('*34'))
+            self.assertTrue(parsers._matches_req_str('34'))
+
+        def test_does_not_match_words(self):
+            print parsers._matches_req_str('hola')
+            self.assertIsNone(parsers._matches_req_str('hola'))
+            self.assertIsNone(parsers._matches_req_str('hola0982nndk][,k]'))
+
+        def test_remove_non_reqs(self):
+            self.assertEqual(
+                parsers._remove_non_reqs(
+                    self.invalid_data['non_reqs_list']),
+                    ['34', '*45'])
+
 
 class TestHddParser(unittest.TestCase):
 
@@ -138,7 +149,9 @@ class TestHddParser(unittest.TestCase):
 
 class TestSimulationParser(unittest.TestCase):
 
-    simulation_dict = json.loads(file.read(open('./examples/protosimulation.json')))
+    simulation_dict = json.loads(
+        file.read(
+            open('./examples/protosimulation.json')))
     simulations_dict = json.loads(file.read(open('./examples/multiple.json')))
 
     def test_simulation_parser(self):
@@ -146,12 +159,14 @@ class TestSimulationParser(unittest.TestCase):
         self.assertIsInstance(simulation, Simulation)
 
     def test_simulations_parser_retunrns_only_simulations(self):
-        simulations = parsers.parse_simulations(self.simulations_dict['simulations'])
+        simulations = parsers.parse_simulations(
+            self.simulations_dict['simulations'])
         for simulation in simulations:
             self.assertIsInstance(simulation, Simulation)
 
     def test_simulations_parser_returns_proper_amount_of_simulations(self):
-        simulations = parsers.parse_simulations(self.simulations_dict['simulations'])
+        simulations = parsers.parse_simulations(
+            self.simulations_dict['simulations'])
         self.assertEqual(len(simulations), 2)
 
 

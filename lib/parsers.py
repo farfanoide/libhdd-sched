@@ -9,7 +9,8 @@ movs_full = re.compile('#\d+')  # Init Movements including number and symbol.
 pf_full = re.compile('\*\d+')   # Full Page Fault, including number and symbol.
 num_str = re.compile('\d+')          # Regular Requirement.
 whitespace = re.compile('\s+')       # Sequence of whitespaces.
-w_extremes = re.compile('^\s+|\s+$') # Preceding and Trailing whitespaces.
+w_extremes = re.compile('^\s+|\s+$')  # Preceding and Trailing whitespaces.
+req_regex = re.compile('^\*?\d+$')
 
 
 def _remove_extra_whitespaces(string):
@@ -21,7 +22,8 @@ def _remove_extra_whitespaces(string):
     """
     return whitespace.sub(' ', w_extremes.sub('', string))
 
-def _parse_movs(lot_dict, lot_str):
+
+def _parse_movs(lot_str):
     """
     Parses Initialization Movements out of a string and returns them as a
     string. Initialization Movements are intended to let a `Simulation()` know
@@ -36,14 +38,13 @@ def _parse_movs(lot_dict, lot_str):
     If lot_str contains more than one match, only the first one will be used
     and any others will be returned inside lot_dict['trash']
     """
-    movs = movs_full.findall(lot_str)
+    movs = movs_full.findall(lot_str) if movs_full.findall(lot_str) else 0
     if movs:
-        lot_dict['movs'] = movs_sym.sub('', movs.pop(0))
-        lot_dict['trash'] += movs
+        movs = movs_sym.sub('', movs.pop(0))
         lot_str = movs_full.sub('', lot_str)
         lot_str = _remove_extra_whitespaces(lot_str)
+    return movs, lot_str
 
-    return lot_dict, lot_str
 
 def _parse_pfs(lot_dict, lot_str):
     """
@@ -62,6 +63,7 @@ def _parse_pfs(lot_dict, lot_str):
 
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
+
 
 def _parse_reqs(lot_dict, lot_str):
     """
@@ -85,6 +87,7 @@ def _parse_reqs(lot_dict, lot_str):
     lot_str = _remove_extra_whitespaces(lot_str)
     return lot_dict, lot_str
 
+
 def _instantiate_reqs(temp_lot):
     lot = {
         'requirements': [parse_requirement(req) for req in temp_lot['reqs']],
@@ -93,29 +96,32 @@ def _instantiate_reqs(temp_lot):
     }
     return lot
 
-def parse_lot(lot_str=''):
-    """
-    Parses and instantiates a Lot from a string.
+# def parse_lot(lot_str=''):
+#     """
+#     Parses and instantiates a Lot from a string.
+#
+#     Keyword Arguments
+#     lot_str (string) -- String containing requirements.
+#     """
+#     lot = {'movs':  0,
+#            'pfs':   [],
+#            'trash': [],
+#            'reqs':  []}
+#
+#     lot, lot_str = _parse_movs(lot, lot_str)
+#     lot, lot_str = _parse_pfs(lot, lot_str)
+#     lot, lot_str = _parse_reqs(lot, lot_str)
+#
+#     if lot_str:
+#         lot['trash'] += lot_str.split(' ')
+# _log(lot['trash'])
+#
+#     return Lot(_instantiate_reqs(lot))
 
-    Keyword Arguments
-    lot_str (string) -- String containing requirements.
-    """
-    lot = {'movs':  0,
-           'pfs':   [],
-           'trash': [],
-           'reqs':  []}
 
-    lot, lot_str = _parse_movs(lot, lot_str)
-    lot, lot_str = _parse_pfs(lot, lot_str)
-    lot, lot_str = _parse_reqs(lot, lot_str)
-
-    if lot_str:
-        lot['trash'] += lot_str.split(' ')
-    # _log(lot['trash'])
-
-    return Lot(_instantiate_reqs(lot))
 def parse_lots(lots):
     return [parse_lot(lot_str) for lot_str in lots]
+
 
 def parse_requirement(reqs_str=''):
     """
@@ -124,6 +130,7 @@ def parse_requirement(reqs_str=''):
     Keyword Arguments
     reqs_str (string) -- String containing a number and optionally a symbol.
     """
+
     if pf_sym.match(reqs_str):
         req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
     else:
@@ -131,27 +138,37 @@ def parse_requirement(reqs_str=''):
 
     return Requirement(req)
 
+
 def parse_hdd(hdd_dict={}):
     return Hdd(hdd_dict)
+
 
 def parse_simulation(simulation_dict={}):
     return Simulation(simulation_dict)
 
+
 def parse_simulations(simulations):
     return [parse_simulation(simulation_str) for simulation_str in simulations]
+
+
 def generic_parser(stuff):
     """ Do not know how to parse you bitch """
     return None
 
+
 def parse_int(integer):
     return int(integer)
+
 
 def parse_str(string):
     return str(string)
 
+
 def parse_bool(boolean):
     # TODO: add some regex matching for strings representing False
     return bool(boolean)
+
+
 def parse_list(some_list):
     return some_list
 
@@ -160,20 +177,23 @@ def parse_list(some_list):
 #     all ParsedStrings should be able to be re-encoded to json
 #     lots don't keep original order when parsed
 
-# def _matches_req_str(req_str):
-#     req_regex = re.compile('^\*?\d+$')
-#     return req_regex.match(req_str)
+def _matches_req_str(req_str):
+    return req_regex.match(req_str)
 
-# def _remove_non_reqs(reqs_list):
-#     print reqs_list
-#     sanitized = reqs_list.copy()
-#     print sanitized
-#     for req_str in reqs_list:
-#         if not _matches_req_str(req_str):
-#             sanitized.remove(req_str)
-#
-# def parse_lot(lot_str=''):
-#     lot_str = _remove_extra_whitespaces(lot_str)
-#     lot_str_list = lot_str.split(' ')
-#     lot_str_list = _remove_non_reqs(lot_str_list)
-#     return  [parse_req(req_str) for req_str in lot_str_list]
+
+def _remove_non_reqs(reqs_list):
+    sanitized = []
+    for req_str in reqs_list:
+        if _matches_req_str(req_str):
+            sanitized += [req_str]
+    return sanitized
+
+
+def parse_lot(lot_str=''):
+    lot_dict = {'requirements':  []}
+    lot_str = _remove_extra_whitespaces(lot_str)
+    lot_dict['movements'], lot_str = _parse_movs(lot_str)
+    lot_str_list = _remove_non_reqs(lot_str.split(' '))
+    lot_dict['requirements'] = [parse_requirement(req_str) for req_str in lot_str_list]
+    return Lot(lot_dict)
+
