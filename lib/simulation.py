@@ -152,3 +152,10 @@ class Simulation(ParsedString):
         'hdd': Hdd(),
         'lots': []
     }
+
+
+class SimulationResult(ParsedString):
+    default_attributes = {
+        attended_requirements = [],
+        final_direction
+    }
