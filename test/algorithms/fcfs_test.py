@@ -2,6 +2,8 @@ import unittest
 import json
 from lib.algorithms import FCFS
 from lib.simulation import Simulation, SimulationResult
+
+
 class TestFcfs(unittest.TestCase):
 
     simulation_dict = json.loads(file.read(open('./examples/protosimulation.json')))
