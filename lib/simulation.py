@@ -156,5 +156,7 @@ class Simulation(ParsedString):
 
 class SimulationResult(ParsedString):
     default_attributes = {
-        'attended_requirements': []
+        'attended_requirements': [],
+        'final_direction' : True,
+        'movements' : 0,
     }
