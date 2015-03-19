@@ -156,6 +156,5 @@ class Simulation(ParsedString):
 
 class SimulationResult(ParsedString):
     default_attributes = {
-        attended_requirements = [],
-        final_direction
+        attended_requirements: []
     }
