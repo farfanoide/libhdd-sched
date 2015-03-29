@@ -65,3 +65,6 @@ class TestParsedString(unittest.TestCase):
         parser = ParsedString()._get_parser('a')
         self.assertEqual(parser, parsers.parse_str)
 
+    def test_equal(self):
+        parsed = ParsedString({'a': 'a'})
+        self.assertEqual(parsed, ParsedString({'a': 'a'}))

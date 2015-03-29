@@ -21,6 +21,13 @@ class ParsedString(object):
         data = self._merge_default_attributes(data)
         self._set_attributes(data)
 
+    def __eq__(self, other):
+        eq = True
+        for attr in self.attribute_names():
+            if getattr(self, attr) != getattr(other, attr):
+                eq = False
+        return eq
+
     def attribute_names(self):
         """ Returns a list with all attribute names for the current instance """
         return sorted(self.__dict__.keys())
@@ -94,7 +101,6 @@ class ParsedString(object):
     def _instantiate_attributes(self, attrs_dict):
         # TODO: missing tests
         validated = {}
-        print self
         for attr, value in attrs_dict.iteritems():
             attribute = self._instantiate_attribute((attr, value))
             if attribute:
@@ -115,7 +121,11 @@ class Requirement(ParsedString):
         value (int)     -- Disk track number.
         is_pf (boolean) -- Wether it is a page fault or not.
     """
+
     default_attributes = {'value': 0, 'is_pf': False}
+
+    def __str__(self):
+        return str(self.value)
 
 
 class Lot(ParsedString):
@@ -156,7 +166,11 @@ class Simulation(ParsedString):
 
 class SimulationResult(ParsedString):
     default_attributes = {
+        'success': False,
+        'error': 1,
         'attended_requirements': [],
         'final_direction' : True,
+        'method': '',
+        'lot_admissions': [],
         'movements' : 0,
     }
