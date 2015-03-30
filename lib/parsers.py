@@ -105,10 +105,6 @@ def parse_list(some_list):
     return some_list
 
 
-# thoughts on lots:
-#     all ParsedStrings should be able to be re-encoded to json
-#     lots don't keep original order when parsed
-
 def _matches_req_str(req_str):
     return req_regex.match(req_str)
 
