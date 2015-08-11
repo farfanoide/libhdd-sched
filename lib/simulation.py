@@ -1,5 +1,3 @@
-import parsers
-
 
 class ParsedString(object):
 
