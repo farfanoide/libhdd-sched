@@ -163,6 +163,9 @@ class Simulation(BaseTemplate):
         'lots': []
     }
 
+    def run(self, algorithm_class):
+        return algorithm_class.execute(self)
+
 
 class SimulationResult(BaseTemplate):
     default_attributes = {
