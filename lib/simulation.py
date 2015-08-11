@@ -1,5 +1,7 @@
+import parsers
 
-class ParsedString(object):
+
+class BaseTemplate(object):
 
     """
     Base class for all simulation objects.
@@ -110,7 +112,7 @@ class ParsedString(object):
             setattr(self, key, value)
 
 
-class Requirement(ParsedString):
+class Requirement(BaseTemplate):
 
     """
     Models a single requirement.
@@ -126,7 +128,7 @@ class Requirement(ParsedString):
         return str(self.value)
 
 
-class Lot(ParsedString):
+class Lot(BaseTemplate):
     default_attributes = {
         'requirements': [],
         'movements': 0
@@ -143,7 +145,7 @@ class Lot(ParsedString):
         pass
 
 
-class Hdd(ParsedString):
+class Hdd(BaseTemplate):
     default_attributes = {
         'name': 'Sample Hdd',
         'tracks': 512,
@@ -152,7 +154,7 @@ class Hdd(ParsedString):
     }
 
 
-class Simulation(ParsedString):
+class Simulation(BaseTemplate):
     default_attributes = {
         'name': 'Sample Simulation',
         'direction': True,
@@ -162,7 +164,7 @@ class Simulation(ParsedString):
     }
 
 
-class SimulationResult(ParsedString):
+class SimulationResult(BaseTemplate):
     default_attributes = {
         'success': False,
         'error': 1,
