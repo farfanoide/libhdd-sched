@@ -97,8 +97,7 @@ def parse_str(string):
 
 
 def parse_bool(boolean):
-    # TODO: add some regex matching for strings representing False
-    return bool(boolean)
+    return False if boolean in ['0', 'false', 'False', 0] else True
 
 
 def parse_list(some_list):
@@ -134,4 +133,3 @@ def parse_lot(lot_str=''):
 
 def parse_lots(lots):
     return [parse_lot(lot_str) for lot_str in lots]
-

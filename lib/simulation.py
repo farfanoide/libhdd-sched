@@ -147,7 +147,7 @@ class Lot(ParsedString):
 
 class Hdd(ParsedString):
     default_attributes = {
-        'name': 'hdd',
+        'name': 'Sample Hdd',
         'tracks': 512,
         'rpm': 5400,
         'seek_time': 500
@@ -156,7 +156,7 @@ class Hdd(ParsedString):
 
 class Simulation(ParsedString):
     default_attributes = {
-        'name': 'protosimulation',
+        'name': 'Sample Simulation',
         'direction': True,
         'position': 0,
         'hdd': Hdd(),
