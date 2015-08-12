@@ -14,7 +14,7 @@ class TestFcfs(unittest.TestCase):
     # movs 2681 final_dir: true lot_intro p 45, 25 or  45, 80 method fcfs
 
     def setUp(self):
-        self.results = FCFS.execute(self.simulation)
+        self.results = FCFS().execute(self.simulation)
 
     def test_fcfs_returns_correct_object(self):
         self.assertIsInstance(self.results, SimulationResult)

@@ -164,7 +164,7 @@ class Simulation(BaseTemplate):
     }
 
     def run(self, algorithm_class):
-        return algorithm_class.execute(self)
+        return algorithm_class().execute(self)
 
 
 class SimulationResult(BaseTemplate):
