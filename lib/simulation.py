@@ -125,7 +125,7 @@ class Requirement(BaseTemplate):
     default_attributes = {'value': 0, 'is_pf': False}
 
     def __str__(self):
-        return str(self.value)
+        return ('', '*')[self.is_pf] + str(self.value)
 
 
 class Lot(BaseTemplate):
@@ -134,15 +134,16 @@ class Lot(BaseTemplate):
         'movements': 0
     }
 
+    def __str__(self):
+        reqs_str = 'Requirements: ' + (' '.join(map(str, self.requirements)))
+        movs_str = 'Movements: ' + str(self.movements)
+        return reqs_str + ', ' + movs_str
+
     def page_faults(self):
-        pfs = []
-        for req in self.requirements:
-            if req.is_pf:
-                pfs += [req]
-        return pfs
+        return [req for req in self.requirements if req.is_pf]
 
     def regular_reqs(self):
-        pass
+        return [req for req in self.requirements if not req.is_pf]
 
 
 class Hdd(BaseTemplate):
@@ -164,7 +165,7 @@ class Simulation(BaseTemplate):
     }
 
     def run(self, algorithm_class):
-        return algorithm_class().execute(self)
+        return algorithm_class(self).execute()
 
 
 class SimulationResult(BaseTemplate):
@@ -172,8 +173,8 @@ class SimulationResult(BaseTemplate):
         'success': False,
         'error': 1,
         'attended_requirements': [],
-        'final_direction' : True,
+        'final_direction': True,
         'method': '',
         'lot_admissions': [],
-        'movements' : 0,
+        'movements': 0,
     }

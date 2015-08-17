@@ -1,15 +1,17 @@
 import json
 from lib.parsers import *
+from .base_algorithm import BaseAlgorithm
 from lib.simulation import Simulation, SimulationResult
 
 
-class FCFS():
+class FCFS(BaseAlgorithm):
+    pass
 
-    def execute(self, simulation):
-       expected = ['*500', '*400', '*100', '53', '151', '33', '353', '100', '455', '15', '101', '126', '366', '415']
-       expected_reqs = [parse_requirement(req) for req in expected]
-       result_dict = {'success': False,
-                       'attended_requirements': expected_reqs
-                   }
-       result_dict['success'] = True
-       return SimulationResult(result_dict)
+    # def execute(self, simulation):
+    #     expected = [ '*500', '*400', '*100', '53', '151', '33', '353', '100', '455', '15', '101', '126', '366', '415']
+    #     expected_reqs = [parse_requirement(req) for req in expected]
+    #     result_dict = {'success': False,
+    #                    'attended_requirements': expected_reqs
+    #                    }
+    #     result_dict['success'] = True
+    #     return SimulationResult(result_dict)
