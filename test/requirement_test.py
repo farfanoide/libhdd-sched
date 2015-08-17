@@ -27,6 +27,14 @@ class TestRequirement(unittest.TestCase):
         self.assertEqual(req.value, 0)
         self.assertFalse(req.is_pf)
 
+    def test_pf_str_representation(self):
+        pf = parsers.parse_requirement('*5')
+        self.assertEqual('*5', str(pf))
+
+    def test_req_str_representation(self):
+        req = parsers.parse_requirement('34')
+        self.assertEqual('34', str(req))
+
 
 if __name__ == '__main__':
     unittest.main()

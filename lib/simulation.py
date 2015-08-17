@@ -123,9 +123,10 @@ class Requirement(BaseTemplate):
     """
 
     default_attributes = {'value': 0, 'is_pf': False}
+    is_pf_str = ('', '*')
 
     def __str__(self):
-        return ('', '*')[self.is_pf] + str(self.value)
+        return self.is_pf_str[self.is_pf] + str(self.value)
 
 
 class Lot(BaseTemplate):
