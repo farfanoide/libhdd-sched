@@ -16,25 +16,39 @@ class BaseAlgorithm(object):
 
     def execute(self):
         for lot in self.simulation.lots:
-            self.page_faults += lot.page_faults()
-            self.unattended += lot.regular_reqs()
-            self.movements = lot.movements
-            for pf in self.page_faults:
-                self.movements -= pf.value
-                self.attended.append(pf)
-                if self.movements <= 0:
+            self._merge_with_previous(lot)
+
+            for page_fault in self.page_faults:
+                self._attend_req(page_fault)
+                if self._exhausted_movements():
                     break
-            if len(self.page_faults) > 0:
+
+            if not self._has_page_faults():
                 while len(self.unattended) > 0:
                     req = self._next_req(self.unattended)
-                    self.movements -= req.value
-                    self.attended.append(req)
-                    if self.movements <= 0:
+                    self._attend_req(req)
+                    if self._exhausted_movements():
                         break
 
         return SimulationResult(self._result())
 
+    def _attend_req(self, req):
+        self.movements -= req.value
+        self.attended.append(req)
+
+    def _merge_with_previous(self, lot):
+        self.page_faults += lot.page_faults()
+        self.unattended += lot.regular_reqs()
+        self.movements = lot.movements
+
+    def _exhausted_movements(self):
+        return self.movements <= 0
+
+    def _has_page_faults(self):
+        return len(self.page_faults) > 0
+
     def _next_req(self, requirements):
+        """ Meant to be overwritten by subclasses"""
         return requirements.pop()
 
     def _result(self):
