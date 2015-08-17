@@ -19,6 +19,7 @@ class BaseAlgorithm(object):
             self._merge_with_previous(lot)
 
             while self._has_page_faults():
+                page_fault = self.page_faults.pop()
                 self._attend_req(page_fault)
                 if self._exhausted_movements():
                     break
