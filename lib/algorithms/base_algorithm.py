@@ -12,7 +12,9 @@ class BaseAlgorithm(object):
         self.simulation = simulation
         self.page_faults = []
         self.unattended = []
+        self.last_attended = simulation.position
         self.attended = []
+        self.total_movs = 0
 
     def execute(self):
         for lot in self.simulation.lots:
@@ -34,8 +36,14 @@ class BaseAlgorithm(object):
         return SimulationResult(self._result())
 
     def _attend_req(self, req):
-        self.movements -= req.value
+        distance = self._distance(req, self.last_attended)
+        self.last_attended = req
+        self.total_movs += distance
+        self.movements -= distance
         self.attended.append(req)
+
+    def _distance(self, origin, destination):
+        return abs(origin - destination)
 
     def _merge_with_previous(self, lot):
         self.page_faults += lot.page_faults()

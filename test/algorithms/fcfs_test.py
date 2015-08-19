@@ -15,7 +15,7 @@ class TestFcfs(unittest.TestCase):
 
     def setUp(self):
         self.results = FCFS(self.simulation).execute()
-
+    #
     def test_fcfs_returns_correct_object(self):
         self.assertIsInstance(self.results, SimulationResult)
 
