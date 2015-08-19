@@ -63,10 +63,10 @@ def parse_requirement(reqs_str=''):
     reqs_str (string) -- String containing a number and optionally a symbol.
     """
 
-    if pf_sym.match(reqs_str):
-        req = {'value': int(pf_sym.sub('', reqs_str)), 'is_pf': True}
-    else:
-        req = {'value': int(reqs_str), 'is_pf': False}
+    req = {
+        'is_pf': bool(pf_sym.match(reqs_str)),
+        'value': int(pf_sym.sub('', reqs_str))
+    }
 
     return Requirement(req)
 
