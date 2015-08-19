@@ -19,25 +19,32 @@ class BaseAlgorithm(object):
     def execute(self):
         for lot in self.simulation.lots:
             self._merge_with_previous(lot)
-
-            while self._has_page_faults():
-                page_fault = self.page_faults.pop()
-                self._attend_req(page_fault)
-                if self._exhausted_movements():
-                    break
-
-            if not self._has_page_faults():
-                while len(self.unattended) > 0:
-                    req = self._next_req(self.unattended)
-                    self._attend_req(req)
-                    if self._exhausted_movements():
-                        break
+            self._attend_page_faults()
+            self._attend_requirements()
 
         return SimulationResult(self._result())
 
+    def _attend_page_faults(self):
+        # TODO: check this conditional
+        while self._has_page_faults():
+            page_fault = self.page_faults.pop()
+            self._attend_req(page_fault)
+            if self._exhausted_movements():
+                break
+
+
+    def _attend_requirements(self):
+        # TODO: check this conditional
+        if not self._has_page_faults():
+            while len(self.unattended) > 0:
+                req = self._next_req(self.unattended)
+                self._attend_req(req)
+                if self._exhausted_movements():
+                    break
+
     def _attend_req(self, req):
         distance = self._distance(req, self.last_attended)
-        self.last_attended = req
+        self.last_attended = req # TODO: get dinamically from self.attended[-1]
         self.total_movs += distance
         self.movements -= distance
         self.attended.append(req)
@@ -58,6 +65,8 @@ class BaseAlgorithm(object):
 
     def _next_req(self, requirements):
         """ Meant to be overwritten by subclasses"""
+        # raise TypeError
+        # TODO: should raise not implemented error.
         return requirements.pop()
 
     def _result(self):
