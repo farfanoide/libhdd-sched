@@ -1,5 +1,5 @@
 import re
-from simulation import Requirement, Lot, Hdd, Simulation
+from . simulation import Requirement, Lot, Hdd, Simulation
 
 
 # Regular Expressions used to parse input into usable lists.
@@ -96,8 +96,15 @@ def parse_str(string):
     return str(string)
 
 
+def parse_direction(direction):
+    return parse_bool(direction)
+
+
 def parse_bool(boolean):
-    return False if boolean in ['0', 'false', 'False', 0] else True
+    if boolean in ['0', 'false', 'False', 'left', 0, False]:
+        return False
+    else:
+        return True
 
 
 def parse_list(some_list):
