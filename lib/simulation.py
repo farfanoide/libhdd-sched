@@ -27,6 +27,7 @@ class BaseTemplate(object):
             if getattr(self, attr) != getattr(other, attr):
                 eq = False
         return eq
+        # TODO: check self.attribute_names() == other.attribute_names()
 
     def attribute_names(self):
         """ Returns a list with all attribute names for the current instance """
@@ -176,8 +177,7 @@ class Simulation(BaseTemplate):
 
 class SimulationResult(BaseTemplate):
     default_attributes = {
-        'success': False,
-        'error': 1,
+        'status': 0,
         'attended_requirements': [],
         'final_direction': True,
         'method': '',
