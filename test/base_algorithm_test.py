@@ -25,3 +25,13 @@ class TestBaseAlgorithm(unittest.TestCase):
         self.algorithm._merge_with_previous(lot)
         self.assertListEqual([parsers.parse_requirement('*34')], self.algorithm.page_faults)
 
+    def test_final_direction(self):
+        self.assertEqual('right', self.algorithm._final_direction())
+
+    # def test_final_direction_reversed(self):
+    #     self.algorithm = BaseAlgorithm(Simulation({'direction': False}))
+    #     self.assertEqual('left', self.algorithm._final_direction())
+
+    def test_method(self):
+        self.assertEqual('BaseAlgorithm', self.algorithm._method())
+

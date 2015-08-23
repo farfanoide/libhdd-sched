@@ -12,8 +12,13 @@ class BaseAlgorithm(object):
         self.simulation = simulation
         self.page_faults = []
         self.unattended = []
+        self.lot_admissions = []
         self.attended = []
         self.total_movs = 0
+        self.status = 0
+
+    def _method(self):
+        return self.__class__.__name__
 
     def execute(self):
         for lot in self.simulation.lots:
@@ -28,9 +33,9 @@ class BaseAlgorithm(object):
         while self._has_page_faults():
             page_fault = self.page_faults.pop()
             self._attend_req(page_fault)
+            # TODO: append to lot_admissions if neccesary
             if self._exhausted_movements():
                 break
-
 
     def _attend_requirements(self):
         # TODO: check this conditional
@@ -68,17 +73,24 @@ class BaseAlgorithm(object):
         return len(self.page_faults) > 0
 
     def _next_req(self, requirements):
-        """ Meant to be overwritten by subclasses"""
-        # raise TypeError
+        """Meant to be overwritten by subclasses"""
         # TODO: should raise not implemented error.
         return requirements.pop()
 
+    def _final_direction(self):
+        try:
+            final_dir = (self.attended[-1] - self.attended[-2]) > 0
+        except IndexError:
+            final_dir = self.simulation.direction
+
+        return ('left', 'right')[final_dir]
+
     def _result(self):
-        return {}
-        # populate dict with everything needed  ['success',
-                 # 'error',
-                 # 'attended_requirements',
-                 # 'final_direction',
-                 # 'method',
-                 # 'lot_admissions',
-                 # 'movements']
+        return {
+            'status': self.status,
+            'attended_requirements': self.attended,
+            'final_direction': self._final_direction(),
+            'method': self._method(),
+            'lot_admissions': self.lot_admissions,
+            'movements': self.total_movs,
+        }
