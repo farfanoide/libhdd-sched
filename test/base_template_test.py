@@ -12,7 +12,7 @@ class TestBaseTemplate(unittest.TestCase):
         'with_values': {'a': '4', 'b': '89', 'd': 'should not be used'}
     }
 
-    def _empty_parsed_string(self):
+    def _empty_base_template(self):
         return BaseTemplate(self.values['empty'])
 
     def test_default_attributes(self):
@@ -29,7 +29,7 @@ class TestBaseTemplate(unittest.TestCase):
         self.assertListEqual(['4', '89', ''], [parsed.a, parsed.b, parsed.c])
 
     def test_attribute_names(self):
-        parsed = self._empty_parsed_string()
+        parsed = self._empty_base_template()
         self.assertListEqual(['a', 'b', 'c'], parsed.attribute_names())
 
     def test_all_values(self):
@@ -37,7 +37,7 @@ class TestBaseTemplate(unittest.TestCase):
         self.assertListEqual(['4', '', '89'], parsed.all_values())
 
     def test_is_empty(self):
-        parsed = self._empty_parsed_string()
+        parsed = self._empty_base_template()
         self.assertTrue(parsed.is_empty())
 
     def test_is_not_empty(self):
@@ -45,9 +45,9 @@ class TestBaseTemplate(unittest.TestCase):
         self.assertFalse(parsed.is_empty())
 
     def test_is_valid_attribute(self):
-        parsed_string = BaseTemplate()
-        self.assertTrue(parsed_string._is_valid_attribute('a'))
-        self.assertFalse(parsed_string._is_valid_attribute('d'))
+        base_template = BaseTemplate()
+        self.assertTrue(base_template._is_valid_attribute('a'))
+        self.assertFalse(base_template._is_valid_attribute('d'))
 
     def test_generic_parser_name(self):
         attr_name = BaseTemplate()._generic_parser_name('a')
